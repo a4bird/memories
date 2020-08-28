@@ -18,7 +18,7 @@ npm run build
 
 npm run cdk bootstrap
 
-npm run cdk deploy $stack_name -- \
+npm run cdk deploy "*" -- \
     --strict \
     --verbose \
     --require-approval never \
