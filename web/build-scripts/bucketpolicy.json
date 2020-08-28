@@ -8,15 +8,6 @@
       "Principal": {
         "Service": "serverlessrepo.amazonaws.com"
       }
-    },
-    {
-      "Sid": "List access for admin role",
-      "Resource": "arn:aws:s3:::a4bird-memories/*",
-      "Action": "*",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": ["arn:aws:iam::989464300156:role/admin"]
-      }
     }
   ]
 }
