@@ -118,7 +118,7 @@ jobs:
         run: yarn build
 
       - name: Run build.sh
-        working-directory: ${{ env.working-directory }}
+        working-directory: ${{ env.working-directory }}/build-scripts
         run: bash ./build.sh
         env:
           GIT_SHA: ${{ github.sha }}
