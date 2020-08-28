@@ -1,0 +1,80 @@
+
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.lock
+*.idle-shm
+*.idle-wal
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+
+# Project files
+
+
+node_modules/
+./Admin.Web/FrontEnd/node_modules/
+
+
+
+.vs/Admin.Api/v15/Server/sqlite3/storage.ide-shm
+.vs/Admin.Api/v15/Server/sqlite3/db.lock
+.vs/Admin.Api/v15/Server/sqlite3/storage.ide-wal
+*/.vs
+.vs
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+packages/
+
+*.boltdata
+Deployed
+
+
+*.ncrunchproject
+*.ncrunchsolution
+
+# NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+
+*.origapp.config
+\r\n
+web.config
+\r\n
+.artifact/
+.pipeline/
+.build/
+version.txt
+Package
+OFX.AuthLoopbackClient/.vs/
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
