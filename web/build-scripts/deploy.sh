@@ -11,7 +11,7 @@ set -euxo pipefail
 
 cd ../.aws/cdk
 
-stack_name="${PROJECT}-${SLUG}"
+STACK_NAME="${PROJECT}-${SLUG}"
 
 npm install
 npm run build
@@ -24,13 +24,12 @@ npm run cdk deploy "*" -- \
     --require-approval never \
     --context Account=$AWS_ACCOUNT \
     --context Region=$REGION \
-    --context StackName=$stack_name \
+    --context StackName=$STACK_NAME \
     --context Environment=$ENVIRONMENT \
     --context Slug=$SLUG \
     --context Project=${PROJECT} \
     --context BuildBucket=${PROJECT} \
     --context BuildBucketKey="${SLUG}/${GIT_SHA}/deployment-package.zip" \
-    --tags billing=widget \
-    --tags Team=Payments \
+    --tags billing=memories \
     --tags Project=$PROJECT \
     --tags Version=$GIT_SHA \

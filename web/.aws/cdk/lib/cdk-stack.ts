@@ -3,19 +3,19 @@ import * as s3 from '@aws-cdk/aws-s3';
 import * as s3Deploy from '@aws-cdk/aws-s3-deployment';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as iam from '@aws-cdk/aws-iam';
-
-import context from './helpers/context';
-
 import { Effect } from '@aws-cdk/aws-iam';
 import { Bucket } from '@aws-cdk/aws-s3';
 
+import context from './helpers/context';
+
 export class CdkStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // The code that defines your stack goes here
     const project = context.getProject(this);
     // S3
-    const bucket = new s3.Bucket(this, 'MemoriesAppBucket', {
+    const bucket = new s3.Bucket(this, 'WidgetAppBucket', {
       bucketName: `${project}-app`,
       publicReadAccess: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -37,7 +37,7 @@ export class CdkStack extends cdk.Stack {
 
     const cfDistribution = new cloudfront.CloudFrontWebDistribution(
       this,
-      'CDKMemoriesAppStaticDistribution',
+      'CDKWidgetAppStaticDistribution',
       {
         originConfigs: [
           {
@@ -61,7 +61,7 @@ export class CdkStack extends cdk.Stack {
       buildBucketName
     );
 
-    const src = new s3Deploy.BucketDeployment(this, 'DeployMemoriesApp', {
+    const src = new s3Deploy.BucketDeployment(this, 'DeployWidgetApp', {
       sources: [s3Deploy.Source.bucket(buildBucket, buildBucketKey)],
       destinationBucket: bucket,
       retainOnDelete: false,
@@ -71,8 +71,8 @@ export class CdkStack extends cdk.Stack {
 
     // Output
 
-    new cdk.CfnOutput(this, `memories-cf-distribution`, {
-      description: 'Cloud front distribution for memories',
+    new cdk.CfnOutput(this, `widget-cf-distribution`, {
+      description: 'Cloud front distribution for widget',
       value: cfDistribution.distributionDomainName,
       exportName: `${project}${slug}::cfDistDomainName`
     });
