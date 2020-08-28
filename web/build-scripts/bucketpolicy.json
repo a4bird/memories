@@ -1,0 +1,31 @@
+{
+  "Statement": [
+    {
+      "Sid": "Read access for the serverlessrepo.amazonaws.com service",
+      "Resource": "arn:aws:s3:::a4bird-memories/*",
+      "Action": "s3:GetObject",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "serverlessrepo.amazonaws.com"
+      }
+    },
+    {
+      "Sid": "List access for admin role",
+      "Resource": "arn:aws:s3:::a4bird-memories",
+      "Action": "s3:ListBucket*",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": ["arn:aws:iam::989464300156:role/admin"]
+      }
+    },
+    {
+      "Sid": "GET access for admin role",
+      "Resource": "arn:aws:s3:::ofx-widget-beneficiary/*",
+      "Action": "s3:GetObject*",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": ["arn:aws:iam::989464300156:role/admin"]
+      }
+    }
+  ]
+}
