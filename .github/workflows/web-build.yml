@@ -5,7 +5,7 @@ on:
     branches: [master]
   workflow_dispatch:
   pull_request:
-    branches: [master, 'feature/*']
+    branches: [master, "feature/*"]
 
 env:
   PROJECT: a4bird-memories
@@ -58,7 +58,7 @@ jobs:
 
       - name: Create s3bucket if not exists
         run: bash ./s3bucket.sh
-        working-directory: ./build-scripts
+        working-directory: ./web/build-scripts
         env:
           BUCKET_NAME: ${{ env.PROJECT }}
 
@@ -85,7 +85,7 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
           always-auth: true
-          scope: '@ofx-com'
+          scope: "@ofx-com"
           registry-url: https://npm.pkg.github.com
 
       - name: Get yarn cache directory path
@@ -113,7 +113,7 @@ jobs:
 
       - name: Run build.sh
         run: bash ./build.sh
-        working-directory: ./build-scripts
+        working-directory: ./web/build-scripts
         env:
           GIT_SHA: ${{ github.sha }}
           VERSION: ${{ format('1.0.0.{0}', github.run_number) }}
@@ -131,9 +131,9 @@ jobs:
             previews: 
               - ant-man
           ref: ${{ github.ref }}
-          environment: 'Development'
+          environment: "Development"
           auto_merge: false
-          required_contexts: '[]'
+          required_contexts: "[]"
           production_environment: false
           bucket_name: ${{ env.PROJECT }}
           version: ${{ format('1.0.0.{0}', github.run_number) }}
