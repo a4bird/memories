@@ -16,7 +16,7 @@ stack_name="${PROJECT}-${SLUG}"
 npm install
 npm run build
 
-npm run cdk bootstrap
+npm run cdk bootstrap aws://$AWS_ACCOUNT/$REGION
 
 npm run cdk deploy "*" -- \
     --strict \
