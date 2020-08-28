@@ -11,7 +11,7 @@
     },
     {
       "Sid": "List access for admin role",
-      "Resource": "arn:aws:s3:::a4bird-memories",
+      "Resource": "arn:aws:s3:::a4bird-memories/*",
       "Action": "*",
       "Effect": "Allow",
       "Principal": {
