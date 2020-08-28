@@ -1,0 +1,30 @@
+name: Deploy to Staging
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure Master
+        if: github.ref != 'refs/heads/master'
+        run: |
+          echo "::error ::Only master deployments can be deployed beyond Development"
+          exit 1;
+
+      - name: Create github deployment
+        id: create_deployment
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/:repository/deployments
+          repository: ${{ github.repository }}
+          mediaType: |
+            previews:
+              - ant-man
+          ref: ${{ github.ref }}
+          environment: "Staging"
+          auto_merge: false
+          production_environment: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADMIN_ORG_PAT }} # using a PAT here as the GITHUB_TOKEN doesn't propagate events (https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow)

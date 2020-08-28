@@ -1,0 +1,129 @@
+name: Deploy
+
+on: deployment
+
+env:
+  PROJECT: a4bird-memories
+  AWS_ACCOUNT_NUMBER: ${{secrets.AWS_ACCOUNT_NUMBER}}
+  AWS_REGION: ap-southeast-2
+  AWS_ROLE_TO_ASSUME: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/admin
+  PREV_ENV: ""
+
+jobs:
+  setup:
+    name: Setup Variables
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch-slug.outputs.branch }}
+      slug: ${{ steps.branch-slug.outputs.slug }}
+    steps:
+      - name: Create Slug
+        id: branch-slug
+        run: |
+          branch_ref=${GITHUB_REF#refs/heads/}
+          branch="${GITHUB_HEAD_REF:-$branch_ref}"
+          slug="${branch//\//-}"
+          echo ::set-output name=branch::${branch}
+          echo ::set-output name=slug::${slug,,}
+      - name: Display branch slug output
+        id: branch-slug-output
+        run: |
+          echo "branch is ${branch}"
+          echo "slug is ${slug}"
+        env:
+          branch: ${{steps.branch-slug.outputs.branch}}
+          slug: ${{steps.branch-slug.outputs.slug}}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./web
+    needs: [setup]
+    steps:
+      - name: Set environment variables for Staging
+        if: github.event.deployment.environment == 'Staging'
+        run: |
+          echo "::set-env name=PREV_ENV::Development"
+
+      - name: Set environment variables for Sandbox
+        if: github.event.deployment.environment == 'Sandbox'
+        run: |
+          echo "::set-env name=PREV_ENV::Staging"
+
+      - name: Set environment variables for Production
+        if: github.event.deployment.environment == 'Production'
+        run: |
+          echo "::set-env name=PREV_ENV::Sandbox"
+
+      - name: Get deployments from the preceding environment
+        if: env.PREV_ENV != ''
+        id: check_previous_stage
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/:repository/deployments?sha=:sha&environment=:environment
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          environment: ${{ env.PREV_ENV }}
+          mediaType: |
+            previews:
+              - ant-man
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check previous deployments
+        if: env.PREV_ENV != '' && steps.check_previous_stage.outputs.data == '[]'
+        run: |
+          echo "::error ::Must deploy to ${{ env.PREV_ENV }} environment before ${{ github.event.deployment.environment }}"
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        id: login-aws
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-2
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1800
+
+      - name: Run deploy.sh
+        run: bash ./deploy.sh
+        working-directory: ${{ env.working-directory }}/build-scripts
+        env:
+          AWS_ACCOUNT: ${{ steps.login-aws.outputs.aws-account-id }}
+          ENVIRONMENT: ${{ github.event.deployment.environment }}
+          REGION: ${{ env.AWS_REGION }}
+          GIT_SHA: ${{ github.sha }}
+          SLUG: ${{ needs.setup.outputs.slug }}
+          PROJECT: ${{ env.PROJECT }}
+
+      - name: Update deployment status (success)
+        uses: octokit/request-action@v2.x
+        if: success()
+        with:
+          route: POST /repos/:repository/deployments/:deployment_id/statuses
+          repository: ${{ github.repository }}
+          deployment_id: ${{ github.event.deployment.id }}
+          mediaType: |
+            previews: 
+              - ant-man
+          state: "success"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update deployment status (failure)
+        uses: octokit/request-action@v2.x
+        if: failure()
+        with:
+          route: POST /repos/:repository/deployments/:deployment_id/statuses
+          repository: ${{ github.repository }}
+          deployment_id: ${{ github.event.deployment.id }}
+          mediaType: |
+            previews: 
+              - ant-man
+          state: "error"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
