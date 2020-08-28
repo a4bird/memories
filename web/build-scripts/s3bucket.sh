@@ -13,5 +13,3 @@ fi
 aws s3api put-public-access-block \
   --bucket ${BUCKET_NAME} \
   --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
-
-aws s3api put-bucket-policy --bucket ${BUCKET_NAME} --policy file://bucketpolicy.json
