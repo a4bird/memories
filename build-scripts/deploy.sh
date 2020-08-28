@@ -18,7 +18,7 @@ npm run build
 
 # npm run cdk bootstrap aws://$AWS_ACCOUNT/$REGION
 
-npm run cdk deploy $stack_name -- \
+npm run cdk deploy $STACK_NAME -- \
     --strict \
     --verbose \
     --require-approval never \

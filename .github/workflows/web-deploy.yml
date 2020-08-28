@@ -36,8 +36,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./web
     needs: [setup]
     steps:
       - name: Set environment variables for Staging
@@ -91,7 +89,7 @@ jobs:
 
       - name: Run deploy.sh
         run: bash ./deploy.sh
-        working-directory: ${{ env.working-directory }}/build-scripts
+        working-directory: ./build-scripts
         env:
           AWS_ACCOUNT: ${{ steps.login-aws.outputs.aws-account-id }}
           ENVIRONMENT: ${{ github.event.deployment.environment }}

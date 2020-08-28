@@ -58,7 +58,7 @@ jobs:
 
       - name: Create s3bucket if not exists
         run: bash ./s3bucket.sh
-        working-directory: ./web/build-scripts
+        working-directory: ./build-scripts
         env:
           BUCKET_NAME: ${{ env.PROJECT }}
 
@@ -66,8 +66,6 @@ jobs:
     name: Lint, Test and Build
     runs-on: ubuntu-18.04
     needs: [setup, s3bucket]
-    env:
-      working-directory: ./web
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -92,7 +90,6 @@ jobs:
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        working-directory: ${{ env.working-directory }}
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Set yarn cache
@@ -103,22 +100,19 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        working-directory: ${{ env.working-directory }}
         run: yarn install --frozen-lockfile
 
       # - name: Run static checks
       #   run: yarn static-ci
 
       - name: Run tests
-        working-directory: ${{ env.working-directory }}
         run: yarn test
 
       - name: Create build folder
-        working-directory: ${{ env.working-directory }}
         run: yarn build
 
       - name: Run build.sh
-        working-directory: ${{ env.working-directory }}/build-scripts
+        working-directory: ./build-scripts
         run: bash ./build.sh
         env:
           GIT_SHA: ${{ github.sha }}
