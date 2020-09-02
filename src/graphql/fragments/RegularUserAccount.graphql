@@ -1,0 +1,4 @@
+fragment RegularUserAccount on UserAccount {
+  id
+  email
+}

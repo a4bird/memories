@@ -15,6 +15,8 @@ import {
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
+import { useLoginMutation } from 'src/graphql/generated/types';
+import { toErrorMap } from 'src/utils/toErrorMap';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 const LoginView: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const [login] = useLoginMutation();
   return (
     <Page className={classes.root} title="Login">
       <Box
@@ -52,8 +54,19 @@ const LoginView: React.FC = () => {
                 .max(255)
                 .required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values, { setErrors }) => {
+              const response = await login({
+                variables: {
+                  usernameOrEmail: values.email,
+                  password: values.password
+                }
+              });
+
+              if (response.data?.login?.errors) {
+                setErrors(toErrorMap(response.data.login.errors));
+              } else if (response.data?.login?.userAccount) {
+                navigate('/app/dashboard', { replace: true });
+              }
             }}>
             {({
               errors,
