@@ -42,8 +42,8 @@ const LoginView: React.FC = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: 'ab.1303@gmail.com',
+              password: 'test123'
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string()

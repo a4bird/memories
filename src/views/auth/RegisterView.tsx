@@ -40,8 +40,6 @@ const RegisterView: React.FC = () => {
           <Formik
             initialValues={{
               email: '',
-              firstName: '',
-              lastName: '',
               password: '',
               policy: false
             }}
@@ -50,12 +48,6 @@ const RegisterView: React.FC = () => {
                 .email('Must be a valid email')
                 .max(255)
                 .required('Email is required'),
-              firstName: Yup.string()
-                .max(255)
-                .required('First name is required'),
-              lastName: Yup.string()
-                .max(255)
-                .required('Last name is required'),
               password: Yup.string()
                 .max(255)
                 .required('password is required'),
@@ -85,30 +77,6 @@ const RegisterView: React.FC = () => {
                     Use your email to create new account
                   </Typography>
                 </Box>
-                <TextField
-                  error={Boolean(touched.firstName && errors.firstName)}
-                  fullWidth
-                  helperText={touched.firstName && errors.firstName}
-                  label="First name"
-                  margin="normal"
-                  name="firstName"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.firstName}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.lastName && errors.lastName)}
-                  fullWidth
-                  helperText={touched.lastName && errors.lastName}
-                  label="Last name"
-                  margin="normal"
-                  name="lastName"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.lastName}
-                  variant="outlined"
-                />
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth

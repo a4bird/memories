@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Logo from 'src/components/Logo';
 
 const useStyles = makeStyles(() => ({
@@ -24,20 +24,20 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const TopBar = ({
-  className,
-  onMobileNavOpen,
-  ...rest
-}) => {
+type Props = {
+  className?: string;
+  onMobileNavOpen: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+  onLogout: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+};
+
+const TopBar = ({ className, onMobileNavOpen, onLogout, ...rest }: Props) => {
   const classes = useStyles();
   const [notifications] = useState([]);
 
   return (
-    <AppBar
-      className={clsx(classes.root, className)}
-      elevation={0}
-      {...rest}
-    >
+    <AppBar className={clsx(classes.root, className)} elevation={0} {...rest}>
       <Toolbar>
         <RouterLink to="/">
           <Logo />
@@ -48,20 +48,16 @@ const TopBar = ({
             <Badge
               badgeContent={notifications.length}
               color="primary"
-              variant="dot"
-            >
+              variant="dot">
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <InputIcon />
+          <IconButton color="inherit" onClick={onLogout}>
+            <ExitToAppIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
+          <IconButton color="inherit" onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>

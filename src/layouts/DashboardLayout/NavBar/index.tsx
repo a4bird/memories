@@ -14,11 +14,9 @@ import {
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Lock as LockIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
-  UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
@@ -56,16 +54,6 @@ const items = [
     title: 'Settings'
   },
   {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
     href: '/404',
     icon: AlertCircleIcon,
     title: 'Error'
@@ -88,7 +76,12 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const NavBar = ({ onMobileClose, openMobile }) => {
+type Props = {
+  onMobileClose: () => void;
+  openMobile: boolean;
+};
+
+const NavBar = ({ onMobileClose, openMobile }: Props) => {
   const classes = useStyles();
   const location = useLocation();
 
@@ -100,41 +93,25 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        p={2}
-      >
+    <Box height="100%" display="flex" flexDirection="column">
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
         <Avatar
           className={classes.avatar}
           component={RouterLink}
           src={user.avatar}
           to="/app/account"
         />
-        <Typography
-          className={classes.name}
-          color="textPrimary"
-          variant="h5"
-        >
+        <Typography color="textPrimary" variant="h5">
           {user.name}
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color="textSecondary" variant="body2">
           {user.jobTitle}
         </Typography>
       </Box>
       <Divider />
       <Box p={2}>
         <List>
-          {items.map((item) => (
+          {items.map(item => (
             <NavItem
               href={item.href}
               key={item.title}
@@ -156,8 +133,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           classes={{ paper: classes.mobileDrawer }}
           onClose={onMobileClose}
           open={openMobile}
-          variant="temporary"
-        >
+          variant="temporary">
           {content}
         </Drawer>
       </Hidden>
@@ -166,8 +142,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           anchor="left"
           classes={{ paper: classes.desktopDrawer }}
           open
-          variant="persistent"
-        >
+          variant="persistent">
           {content}
         </Drawer>
       </Hidden>
@@ -181,7 +156,7 @@ NavBar.propTypes = {
 };
 
 NavBar.defaultProps = {
-  onMobileClose: () => { },
+  onMobileClose: () => {},
   openMobile: false
 };
 
