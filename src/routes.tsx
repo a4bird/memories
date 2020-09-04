@@ -11,17 +11,18 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import ProtectedRoute from './views/auth/ProtectedRoute';
 
 export default () => (
   <Routes>
-    <Route path="app" element={<DashboardLayout />}>
+    <ProtectedRoute path="app" element={<DashboardLayout />}>
       <Route path="account" element={<AccountView />}></Route>
       <Route path="customers" element={<CustomerListView />}></Route>
       <Route path="dashboard" element={<DashboardView />}></Route>
       <Route path="products" element={<ProductListView />}></Route>
       <Route path="settings" element={<SettingsView />}></Route>
       <Route path="*" element={<Navigate to="/404" />}></Route>
-    </Route>
+    </ProtectedRoute>
     <Route path="/" element={<MainLayout />}>
       <Route path="login" element={<LoginView />}></Route>
       <Route path="register" element={<RegisterView />}></Route>
