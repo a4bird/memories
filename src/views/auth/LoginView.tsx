@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -18,6 +18,8 @@ import Page from 'src/components/Page';
 import { useLoginMutation } from 'src/graphql/generated/types';
 import { toErrorMap } from 'src/utils/toErrorMap';
 
+import { useAuthState, useAuthDispatch, AuthEvent } from 'src/context/Auth';
+
 const useStyles = makeStyles(theme => ({
   root: {
     // backgroundColor: theme.palette.background.dark,
@@ -31,8 +33,19 @@ const useStyles = makeStyles(theme => ({
 const LoginView: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const dispatch = useAuthDispatch();
+  const authState = useAuthState();
   const [login] = useLoginMutation();
-  return (
+
+  useEffect(() => {
+    if (authState.isAuthenticated) {
+      navigate('/app/dashboard', { replace: true });
+    }
+  }, [authState.isAuthenticated, navigate]);
+
+  return authState.isAuthenticated ? (
+    <div>Loading...</div>
+  ) : (
     <Page className={classes.root} title="Login">
       <Box
         display="flex"
@@ -65,6 +78,12 @@ const LoginView: React.FC = () => {
               if (response.data?.login?.errors) {
                 setErrors(toErrorMap(response.data.login.errors));
               } else if (response.data?.login?.userAccount) {
+                dispatch({
+                  type: AuthEvent.LOGIN,
+                  payload: {
+                    userAccount: response.data?.login?.userAccount
+                  }
+                });
                 navigate('/app/dashboard', { replace: true });
               }
             }}>
@@ -78,7 +97,7 @@ const LoginView: React.FC = () => {
               values
             }) => (
               <form onSubmit={handleSubmit}>
-                <Box mb={3}>
+                {/* <Box mb={3}>
                   <Typography color="textPrimary" variant="h2">
                     Sign in
                   </Typography>
@@ -119,7 +138,7 @@ const LoginView: React.FC = () => {
                     variant="body1">
                     or login with email address
                   </Typography>
-                </Box>
+                </Box> */}
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
