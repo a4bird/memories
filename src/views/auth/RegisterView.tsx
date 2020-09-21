@@ -13,6 +13,10 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+
+import { useRegisterMutation } from 'src/graphql/generated/types';
+import { toErrorMap } from 'src/utils/toErrorMap';
+
 import Page from 'src/components/Page';
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 const RegisterView: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [register] = useRegisterMutation();
 
   return (
     <Page className={classes.root} title="Register">
@@ -53,8 +58,19 @@ const RegisterView: React.FC = () => {
                 .required('password is required'),
               policy: Yup.boolean().oneOf([true], 'This field must be checked')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values, { setErrors }) => {
+              const response = await register({
+                variables: {
+                  usernameOrEmail: values.email,
+                  password: values.password
+                }
+              });
+
+              if (response.data?.register?.errors) {
+                setErrors(toErrorMap(response.data.register.errors));
+              } else if (response.data?.register?.userAccount) {
+                navigate('/app/login', { replace: true });
+              }
             }}>
             {({
               errors,
