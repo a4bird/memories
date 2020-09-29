@@ -1,5 +1,4 @@
 import { Error } from '../graphql/generated/types';
-import { Maybe } from 'graphql/jsutils/Maybe';
 
 export const toErrorMap = (errors: Array<Error>) => {
   const errorMap: Record<string, string> = {};
