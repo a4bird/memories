@@ -135,7 +135,6 @@ jobs:
           auto_merge: false
           required_contexts: "[]"
           production_environment: false
-          bucket_name: ${{ env.PROJECT }}
           version: ${{ format('1.0.0.{0}', github.run_number) }}
         env:
           GITHUB_TOKEN: ${{ secrets.ADMIN_ORG_PAT }} # using a PAT here as the GITHUB_TOKEN doesn't propagate events (https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token#using-the-github_token-in-a-workflow)
