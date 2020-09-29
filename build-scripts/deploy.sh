@@ -2,6 +2,9 @@
 set -euxo pipefail
 
 : ${AWS_ACCOUNT?"AWS_ACCOUNT env variable is required"}
+: ${AWS_CERTIFICATE_ARN?"AWS_CERTIFICATE_ARN env variable is required"}
+: ${AWS_ROUTE53_DOMAIN?"AWS_ROUTE53_DOMAIN env variable is required"}
+: ${AWS_ROUTE53_SUBDOMAIN?"AWS_ROUTE53_SUBDOMAIN env variable is required"}
 : ${ENVIRONMENT?"ENVIRONMENT env variable is required"}
 : ${ENV_SUFFIX?"ENV_SUFFIX env variable is required"}
 : ${REGION?"REGION env variable is required"}
@@ -24,6 +27,9 @@ npm run cdk deploy $STACK_NAME -- \
     --verbose \
     --require-approval never \
     --context Account=$AWS_ACCOUNT \
+    --context AWS_CERTIFICATE_ARN=$AWS_CERTIFICATE_ARN \
+    --context AWS_ROUTE53_DOMAIN=$AWS_ROUTE53_DOMAIN \
+    --context AWS_ROUTE53_SUBDOMAIN=$AWS_ROUTE53_SUBDOMAIN \
     --context Region=$REGION \
     --context StackName=$STACK_NAME \
     --context Environment=$ENVIRONMENT \

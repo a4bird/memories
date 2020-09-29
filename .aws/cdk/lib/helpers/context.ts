@@ -11,6 +11,15 @@ export default {
   getRegion: (construct: IConstruct) => {
     return getStringValue(construct, 'Region');
   },
+  getAWSCertificateArn: (construct: IConstruct) => {
+    return getStringValue(construct, 'AWS_CERTIFICATE_ARN');
+  },
+  getAWSRoute53Domain: (construct: IConstruct) => {
+    return getStringValue(construct, 'AWS_ROUTE53_DOMAIN');
+  },
+  getAWSRoute53SubDomain: (construct: IConstruct) => {
+    return getStringValue(construct, 'AWS_ROUTE53_SUBDOMAIN');
+  },
   getStackName: (construct: IConstruct) => {
     return getStringValue(construct, 'StackName');
   },

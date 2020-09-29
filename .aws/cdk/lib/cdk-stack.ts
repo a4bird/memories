@@ -1,11 +1,12 @@
 import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
+import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as s3Deploy from '@aws-cdk/aws-s3-deployment';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as iam from '@aws-cdk/aws-iam';
-import { Effect } from '@aws-cdk/aws-iam';
+import * as route53 from '@aws-cdk/aws-route53';
+import * as targets from '@aws-cdk/aws-route53-targets';
 import { Bucket } from '@aws-cdk/aws-s3';
 
+import { createS3Bucket } from './constructs/s3Bucket';
 import context from './helpers/context';
 
 export class CdkStack extends cdk.Stack {
@@ -14,29 +15,37 @@ export class CdkStack extends cdk.Stack {
 
     // The code that defines your stack goes here
     const project = context.getProject(this);
-    const envSuffix = context.getEnvSuffix(this);
     const slug = context.getSlug(this);
+    const envSuffix = context.getEnvSuffix(this);
+    const certificateArn = context.getAWSCertificateArn(this);
+    const domain = context.getAWSRoute53Domain(this);
+    const subdomain = context.getAWSRoute53SubDomain(this);
+
+    const fullDomainName = `${subdomain}.${domain}`;
     // S3
-    const bucket = new s3.Bucket(this, 'WidgetAppBucket', {
-      bucketName: `${project}-${envSuffix}-${slug}-app`,
-      publicReadAccess: true,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'index.html'
+
+    const bucket = createS3Bucket(this, {
+      bucketName: `${project}-${envSuffix}-${slug}-app`
     });
 
-    bucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        sid: 'PublicReadGetObject',
-        effect: Effect.ALLOW,
-        principals: [new iam.Anyone()],
-        actions: ['s3:GetObject'],
-        resources: [`${bucket.bucketArn}/*`]
-      })
+    // Route 53 - Custom Domain
+
+    const hostedZone = route53.HostedZone.fromLookup(
+      this,
+      'Route53HostedZone',
+      {
+        domainName: domain
+      }
+    );
+
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      'Certificate',
+      certificateArn
     );
 
     // Cloud front distribution
-
+    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'OAI');
     const cfDistribution = new cloudfront.CloudFrontWebDistribution(
       this,
       'CDKWidgetAppStaticDistribution',
@@ -44,13 +53,32 @@ export class CdkStack extends cdk.Stack {
         originConfigs: [
           {
             s3OriginSource: {
-              s3BucketSource: bucket
+              s3BucketSource: bucket,
+              originAccessIdentity: cloudFrontOAI
             },
             behaviors: [{ isDefaultBehavior: true }]
           }
-        ]
+        ],
+        viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(
+          certificate,
+          {
+            aliases: [`${fullDomainName}`],
+            securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1, // default
+            sslMethod: cloudfront.SSLMethod.SNI // default
+          }
+        )
       }
     );
+
+    new route53.ARecord(this, 'Alias', {
+      zone: hostedZone,
+      recordName: `${fullDomainName}`,
+      target: route53.RecordTarget.fromAlias(
+        new targets.CloudFrontTarget(cfDistribution)
+      )
+    });
+
+    bucket.grantRead(cloudFrontOAI.grantPrincipal);
 
     // Deployment
 
@@ -76,6 +104,12 @@ export class CdkStack extends cdk.Stack {
       description: 'Cloud front distribution for widget',
       value: cfDistribution.distributionDomainName,
       exportName: `${project}${slug}::cfDistDomainName`
+    });
+
+    new cdk.CfnOutput(this, `memories-web-url`, {
+      description: 'Web Url for memories',
+      value: `https://${fullDomainName}`,
+      exportName: `${project}${slug}::url`
     });
   }
 }

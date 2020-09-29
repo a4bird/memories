@@ -7,8 +7,8 @@ env:
   AWS_ACCOUNT_NUMBER: ${{secrets.AWS_ACCOUNT_NUMBER}}
   AWS_REGION: ap-southeast-2
   AWS_ROLE_TO_ASSUME: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/admin
-  ENV_SUFFIX: "dev"
-  PREV_ENV: ""
+  ENV_SUFFIX: 'dev'
+  PREV_ENV: ''
 
 jobs:
   setup:
@@ -93,6 +93,9 @@ jobs:
           ENVIRONMENT: ${{ github.event.deployment.environment }}
           REGION: ${{ env.AWS_REGION }}
           PROJECT: ${{ env.PROJECT }}
+          AWS_CERTIFICATE_ARN: arn:aws:acm:${{ env.AWS_PRIMARY_REGION }}:${{ steps.login-aws.outputs.aws-account-id }}:certificate/${{ secrets.AWS_CERTIFICATE_ID }}
+          AWS_ROUTE53_DOMAIN: a4brd.tk
+          AWS_ROUTE53_SUBDOMAIN: memories-${{ env.ENV_SUFFIX }}-${{ needs.setup.outputs.slug }}
           ENV_SUFFIX: ${{ env.ENV_SUFFIX }}
           GIT_SHA: ${{ github.sha }}
           SLUG: ${{ needs.setup.outputs.slug }}
@@ -107,7 +110,7 @@ jobs:
           mediaType: |
             previews: 
               - ant-man
-          state: "success"
+          state: 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -121,6 +124,6 @@ jobs:
           mediaType: |
             previews: 
               - ant-man
-          state: "error"
+          state: 'error'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
