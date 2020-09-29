@@ -17,6 +17,9 @@ export default {
   getEnvironment: (construct: IConstruct) => {
     return getStringValue(construct, 'Environment');
   },
+  getEnvSuffix: (construct: IConstruct) => {
+    return getStringValue(construct, 'EnvSuffix');
+  },
   getSlug: (construct: IConstruct) => {
     return getStringValue(construct, 'Slug');
   },
@@ -28,5 +31,5 @@ export default {
   },
   getBuildBucketKey: (construct: IConstruct) => {
     return getStringValue(construct, 'BuildBucketKey');
-  },
+  }
 };

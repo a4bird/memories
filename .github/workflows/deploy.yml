@@ -7,6 +7,7 @@ env:
   AWS_ACCOUNT_NUMBER: ${{secrets.AWS_ACCOUNT_NUMBER}}
   AWS_REGION: ap-southeast-2
   AWS_ROLE_TO_ASSUME: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/admin
+  ENV_SUFFIX: "dev"
   PREV_ENV: ""
 
 jobs:
@@ -39,19 +40,16 @@ jobs:
     needs: [setup]
     steps:
       - name: Set environment variables for Staging
-        if: github.event.deployment.environment == 'Staging'
+        if: github.event.deployment.environment == 'staging'
         run: |
-          echo "::set-env name=PREV_ENV::Development"
-
-      - name: Set environment variables for Sandbox
-        if: github.event.deployment.environment == 'Sandbox'
-        run: |
-          echo "::set-env name=PREV_ENV::Staging"
+          echo "::set-env name=PREV_ENV::development"
+          echo "::set-env name=ENV_SUFFIX::stg"
 
       - name: Set environment variables for Production
-        if: github.event.deployment.environment == 'Production'
+        if: github.event.deployment.environment == 'production'
         run: |
-          echo "::set-env name=PREV_ENV::Sandbox"
+          echo "::set-env name=PREV_ENV::staging"
+          echo "::set-env name=ENV_SUFFIX::prod"
 
       - name: Get deployments from the preceding environment
         if: env.PREV_ENV != ''
@@ -94,9 +92,10 @@ jobs:
           AWS_ACCOUNT: ${{ steps.login-aws.outputs.aws-account-id }}
           ENVIRONMENT: ${{ github.event.deployment.environment }}
           REGION: ${{ env.AWS_REGION }}
+          PROJECT: ${{ env.PROJECT }}
+          ENV_SUFFIX: ${{ env.ENV_SUFFIX }}
           GIT_SHA: ${{ github.sha }}
           SLUG: ${{ needs.setup.outputs.slug }}
-          PROJECT: ${{ env.PROJECT }}
 
       - name: Update deployment status (success)
         uses: octokit/request-action@v2.x

@@ -14,9 +14,11 @@ export class CdkStack extends cdk.Stack {
 
     // The code that defines your stack goes here
     const project = context.getProject(this);
+    const envSuffix = context.getEnvSuffix(this);
+    const slug = context.getSlug(this);
     // S3
     const bucket = new s3.Bucket(this, 'WidgetAppBucket', {
-      bucketName: `${project}-app`,
+      bucketName: `${project}-${envSuffix}-${slug}-app`,
       publicReadAccess: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       websiteIndexDocument: 'index.html',
@@ -52,7 +54,6 @@ export class CdkStack extends cdk.Stack {
 
     // Deployment
 
-    const slug = context.getSlug(this);
     const buildBucketName = context.getBuildBucket(this);
     const buildBucketKey = context.getBuildBucketKey(this);
     const buildBucket = Bucket.fromBucketName(
