@@ -11,6 +11,8 @@ export type Scalars = {
   Float: number;
   /** Represents NULL values */
   Void: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 
@@ -23,26 +25,39 @@ export type Error = {
 export type Query = {
   __typename?: 'Query';
   _dummy?: Maybe<Scalars['Boolean']>;
-  me?: Maybe<UserAccount>;
+  me?: Maybe<MeOutput>;
 };
 
 export type UserAccount = {
   __typename?: 'UserAccount';
   id: Scalars['ID'];
   email: Scalars['String'];
+  profile?: Maybe<UserProfile>;
 };
 
-export type UserAccountOutput = {
-  __typename?: 'UserAccountOutput';
+export type RegisterOutput = {
+  __typename?: 'RegisterOutput';
   userAccount?: Maybe<UserAccount>;
   errors?: Maybe<Array<Error>>;
 };
 
+export type LoginOutput = {
+  __typename?: 'LoginOutput';
+  userAccount?: Maybe<UserAccount>;
+  errors?: Maybe<Array<Error>>;
+};
+
+export type MeOutput = {
+  __typename?: 'MeOutput';
+  userAccount?: Maybe<UserAccount>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  login?: Maybe<UserAccountOutput>;
-  register?: Maybe<UserAccountOutput>;
+  login?: Maybe<LoginOutput>;
+  register?: Maybe<RegisterOutput>;
   logout?: Maybe<Scalars['Void']>;
+  saveProfile?: Maybe<UserProfileOutput>;
 };
 
 
@@ -57,25 +72,76 @@ export type MutationRegisterArgs = {
   password: Scalars['String'];
 };
 
-export type RegularErrorFragment = (
+
+export type MutationSaveProfileArgs = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  gender: Gender;
+};
+
+/** Gender Enum */
+export enum Gender {
+  Male = 'MALE',
+  Female = 'FEMALE',
+  Other = 'OTHER',
+  Na = 'NA'
+}
+
+/** User Profile */
+export type UserProfile = {
+  __typename?: 'UserProfile';
+  /** Id */
+  id: Scalars['Int'];
+  /** First Name */
+  firstName: Scalars['String'];
+  /** Last Name */
+  lastName: Scalars['String'];
+  /** Gender */
+  gender: Gender;
+};
+
+export type UserProfileOutput = {
+  __typename?: 'UserProfileOutput';
+  userProfile?: Maybe<UserProfile>;
+  errors?: Maybe<Array<Error>>;
+};
+
+export enum CacheControlScope {
+  Public = 'PUBLIC',
+  Private = 'PRIVATE'
+}
+
+
+export type ErrorFragment = (
   { __typename?: 'Error' }
   & Pick<Error, 'path' | 'message'>
 );
 
-export type RegularUserAccountFragment = (
-  { __typename?: 'UserAccount' }
-  & Pick<UserAccount, 'id' | 'email'>
-);
-
-export type UserAccountOutputFragment = (
-  { __typename?: 'UserAccountOutput' }
+export type LoginOutputFragment = (
+  { __typename?: 'LoginOutput' }
   & { errors?: Maybe<Array<(
     { __typename?: 'Error' }
-    & RegularErrorFragment
+    & ErrorFragment
   )>>, userAccount?: Maybe<(
     { __typename?: 'UserAccount' }
-    & RegularUserAccountFragment
+    & UserAccountFragment
   )> }
+);
+
+export type RegisterOutputFragment = (
+  { __typename?: 'RegisterOutput' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'Error' }
+    & ErrorFragment
+  )>>, userAccount?: Maybe<(
+    { __typename?: 'UserAccount' }
+    & UserAccountFragment
+  )> }
+);
+
+export type UserAccountFragment = (
+  { __typename?: 'UserAccount' }
+  & Pick<UserAccount, 'id' | 'email'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -87,8 +153,8 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login?: Maybe<(
-    { __typename?: 'UserAccountOutput' }
-    & UserAccountOutputFragment
+    { __typename?: 'LoginOutput' }
+    & LoginOutputFragment
   )> }
 );
 
@@ -109,8 +175,8 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register?: Maybe<(
-    { __typename?: 'UserAccountOutput' }
-    & UserAccountOutputFragment
+    { __typename?: 'RegisterOutput' }
+    & RegisterOutputFragment
   )> }
 );
 
@@ -120,41 +186,55 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
-    { __typename?: 'UserAccount' }
-    & RegularUserAccountFragment
+    { __typename?: 'MeOutput' }
+    & { userAccount?: Maybe<(
+      { __typename?: 'UserAccount' }
+      & UserAccountFragment
+    )> }
   )> }
 );
 
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on Error {
+export const ErrorFragmentDoc = gql`
+    fragment Error on Error {
   path
   message
 }
     `;
-export const RegularUserAccountFragmentDoc = gql`
-    fragment RegularUserAccount on UserAccount {
+export const UserAccountFragmentDoc = gql`
+    fragment UserAccount on UserAccount {
   id
   email
 }
     `;
-export const UserAccountOutputFragmentDoc = gql`
-    fragment UserAccountOutput on UserAccountOutput {
+export const LoginOutputFragmentDoc = gql`
+    fragment LoginOutput on LoginOutput {
   errors {
-    ...RegularError
+    ...Error
   }
   userAccount {
-    ...RegularUserAccount
+    ...UserAccount
   }
 }
-    ${RegularErrorFragmentDoc}
-${RegularUserAccountFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserAccountFragmentDoc}`;
+export const RegisterOutputFragmentDoc = gql`
+    fragment RegisterOutput on RegisterOutput {
+  errors {
+    ...Error
+  }
+  userAccount {
+    ...UserAccount
+  }
+}
+    ${ErrorFragmentDoc}
+${UserAccountFragmentDoc}`;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(email: $usernameOrEmail, password: $password) {
-    ...UserAccountOutput
+    ...LoginOutput
   }
 }
-    ${UserAccountOutputFragmentDoc}`;
+    ${LoginOutputFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -213,10 +293,10 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const RegisterDocument = gql`
     mutation Register($usernameOrEmail: String!, $password: String!) {
   register(email: $usernameOrEmail, password: $password) {
-    ...UserAccountOutput
+    ...RegisterOutput
   }
 }
-    ${UserAccountOutputFragmentDoc}`;
+    ${RegisterOutputFragmentDoc}`;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -246,10 +326,12 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const MeDocument = gql`
     query Me {
   me {
-    ...RegularUserAccount
+    userAccount {
+      ...UserAccount
+    }
   }
 }
-    ${RegularUserAccountFragmentDoc}`;
+    ${UserAccountFragmentDoc}`;
 
 /**
  * __useMeQuery__

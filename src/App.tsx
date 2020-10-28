@@ -17,11 +17,14 @@ const App: React.FC = () => {
   useEffect(() => {
     if (loading || error) return;
 
-    if (!authState.isAuthenticated && data?.me) {
+    if (!authState.isAuthenticated && data?.me?.userAccount) {
       dispatch({
         type: AuthEvent.ALREADY_LOGGEDIN,
         payload: {
-          userAccount: data.me
+          userAccount: {
+            id: data.me.userAccount.id,
+            email: data.me.userAccount.email
+          }
         }
       });
     }
