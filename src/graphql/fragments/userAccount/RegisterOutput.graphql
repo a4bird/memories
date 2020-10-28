@@ -1,0 +1,8 @@
+fragment RegisterOutput on RegisterOutput {
+  errors {
+    ...Error
+  }
+  userAccount {
+    ...UserAccount
+  }
+}

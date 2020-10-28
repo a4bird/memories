@@ -1,0 +1,8 @@
+fragment LoginOutput on LoginOutput {
+  errors {
+    ...Error
+  }
+  userAccount {
+    ...UserAccount
+  }
+}

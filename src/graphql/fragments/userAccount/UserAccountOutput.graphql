@@ -1,8 +1,0 @@
-fragment UserAccountOutput on UserAccountOutput {
-  errors {
-    ...RegularError
-  }
-  userAccount {
-    ...RegularUserAccount
-  }
-}
