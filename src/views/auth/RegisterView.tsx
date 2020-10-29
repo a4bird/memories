@@ -43,28 +43,39 @@ const validationSchema = Yup.object().shape({
     .required('Email is required'),
   password: Yup.string()
     .max(255)
-    .required('password is required')
-  // policy: Yup.boolean().oneOf([true], 'This field must be checked')
+    .required('password is required'),
+  policy: Yup.boolean().oneOf([true], 'This field must be checked')
 });
 
 const RegisterView: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [registerUser] = useRegisterMutation();
-  const { formState, control, errors, handleSubmit } = useForm<
+  const { register, formState, control, errors, handleSubmit } = useForm<
     RegisterFormData
   >({
     defaultValues: {
       email: '',
       password: '',
-      policy: false
+      policy: false,
+      Checkbox: false
     },
     resolver: yupResolver(validationSchema)
   });
 
-  const onSave = async (formData: RegisterFormData) => {
-    console.log('On Save register', formData);
-    return;
+  const onSave = async (values: RegisterFormData) => {
+    const response = await registerUser({
+      variables: {
+        usernameOrEmail: values.email,
+        password: values.password
+      }
+    });
+
+    if (response.data?.register?.errors) {
+      console.log('Register Errors', toErrorMap(response.data.register.errors));
+    } else if (response.data?.register?.userAccount) {
+      navigate('/app/login', { replace: true });
+    }
   };
 
   return (
@@ -85,34 +96,34 @@ const RegisterView: React.FC = () => {
                   Use your email to create new account
                 </Typography>
               </Box>
-              <Controller
-                as={TextField}
-                control={control}
-                label="Email Address"
+              <TextField
+                inputRef={register({ required: 'Email Address Required' })}
                 margin="normal"
                 name="email"
-                rules={{
-                  required: true
-                }}
+                label="Email Address"
                 error={!!errors?.email?.message}
               />
-              <Controller
-                as={TextField}
-                control={control}
+
+              <TextField
+                inputRef={register({ required: 'Password Required' })}
                 label="Password"
                 margin="normal"
                 name="password"
-                rules={{
-                  required: true
-                }}
-                error={!!errors?.password?.message}
+                error={!!errors?.email?.message}
               />
+
               <Box alignItems="center" display="flex" ml={-1}>
                 <Controller
-                  as={<Checkbox />}
-                  name="policy"
-                  type="checkbox"
                   control={control}
+                  name="policy"
+                  render={({ onChange, onBlur, value, name }) => (
+                    <Checkbox
+                      onBlur={onBlur}
+                      onChange={e => onChange(e.target.checked)}
+                      checked={value}
+                      name={name}
+                    />
+                  )}
                 />
                 <Typography color="textSecondary" variant="body1">
                   I have read the{' '}
