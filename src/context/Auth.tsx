@@ -2,9 +2,15 @@ import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 
 import ActionMap from '../utils/actionMap';
 
+type UserProfile = {
+  firstName?: string;
+  lastName?: string;
+};
+
 type UserAccount = {
   id: string;
   email: string;
+  profile?: UserProfile;
 };
 
 type AuthState = {
@@ -35,12 +41,12 @@ const authReducer = (state: AuthState, action: Actions): AuthState => {
     case AuthEvent.LOGIN:
       return {
         isAuthenticated: true,
-        userAccount: action.payload.userAccount
+        userAccount: { ...action.payload.userAccount }
       };
     case AuthEvent.ALREADY_LOGGEDIN:
       return {
         isAuthenticated: true,
-        userAccount: action.payload.userAccount
+        userAccount: { ...action.payload.userAccount }
       };
     case AuthEvent.LOGOUT:
       return {

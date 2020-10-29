@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -20,11 +19,12 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
+import { useAuthState } from 'src/context/Auth';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
   jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
+  name: 'Abdul Wahab'
 };
 
 const items = [
@@ -89,8 +89,9 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
     if (openMobile && onMobileClose) {
       onMobileClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, [location.pathname, onMobileClose, openMobile]);
+
+  const { userAccount } = useAuthState();
 
   const content = (
     <Box height="100%" display="flex" flexDirection="column">
@@ -102,7 +103,7 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
           to="/app/account"
         />
         <Typography color="textPrimary" variant="h5">
-          {user.name}
+          {`${userAccount?.profile?.firstName} ${userAccount?.profile?.lastName}`}
         </Typography>
         <Typography color="textSecondary" variant="body2">
           {user.jobTitle}
@@ -148,16 +149,6 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
-};
-
-NavBar.defaultProps = {
-  onMobileClose: () => {},
-  openMobile: false
 };
 
 export default NavBar;

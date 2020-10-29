@@ -23,7 +23,11 @@ const App: React.FC = () => {
         payload: {
           userAccount: {
             id: data.me.userAccount.id,
-            email: data.me.userAccount.email
+            email: data.me.userAccount.email,
+            profile: {
+              firstName: data.me.userAccount.profile?.firstName,
+              lastName: data.me.userAccount.profile?.lastName
+            }
           }
         }
       });

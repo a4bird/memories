@@ -57,8 +57,7 @@ const RegisterView: React.FC = () => {
     defaultValues: {
       email: '',
       password: '',
-      policy: false,
-      Checkbox: false
+      policy: false
     },
     resolver: yupResolver(validationSchema)
   });
