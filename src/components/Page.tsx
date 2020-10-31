@@ -9,6 +9,7 @@ type Props = {
 
 export type Ref = HTMLDivElement;
 
+// eslint-disable-next-line react/display-name
 const Page = forwardRef<Ref, Props>(
   ({ children, title = '', ...rest }, ref) => {
     return (

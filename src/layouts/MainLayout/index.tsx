@@ -1,6 +1,11 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
+
+import LoginView from 'src/views/auth/LoginView';
+import NotFoundView from 'src/views/errors/NotFoundView';
+import RegisterView from 'src/views/auth/RegisterView';
+
 import TopBar from './TopBar';
 
 const useStyles = makeStyles(theme => ({
@@ -38,7 +43,23 @@ const MainLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Outlet />
+            <Switch>
+              <Route path="/login" exact>
+                <LoginView />
+              </Route>
+              <Route path="/register" exact>
+                <RegisterView />
+              </Route>
+              <Route path="/404" exact>
+                <NotFoundView />
+              </Route>
+              <Route path="/">
+                <Redirect to="/login" />
+              </Route>
+              <Route path="*">
+                <Redirect to="/404" />
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>

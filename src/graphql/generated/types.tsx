@@ -142,6 +142,10 @@ export type RegisterOutputFragment = (
 export type UserAccountFragment = (
   { __typename?: 'UserAccount' }
   & Pick<UserAccount, 'id' | 'email'>
+  & { profile?: Maybe<(
+    { __typename?: 'UserProfile' }
+    & UserProfileFragment
+  )> }
 );
 
 export type UserProfileFragment = (
@@ -209,12 +213,21 @@ export const ErrorFragmentDoc = gql`
   message
 }
     `;
+export const UserProfileFragmentDoc = gql`
+    fragment UserProfile on UserProfile {
+  firstName
+  lastName
+}
+    `;
 export const UserAccountFragmentDoc = gql`
     fragment UserAccount on UserAccount {
   id
   email
+  profile {
+    ...UserProfile
+  }
 }
-    `;
+    ${UserProfileFragmentDoc}`;
 export const LoginOutputFragmentDoc = gql`
     fragment LoginOutput on LoginOutput {
   errors {
@@ -237,12 +250,6 @@ export const RegisterOutputFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${UserAccountFragmentDoc}`;
-export const UserProfileFragmentDoc = gql`
-    fragment UserProfile on UserProfile {
-  firstName
-  lastName
-}
-    `;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(email: $usernameOrEmail, password: $password) {

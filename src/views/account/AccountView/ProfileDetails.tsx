@@ -9,23 +9,13 @@ import {
   Divider,
   Grid,
   TextField,
-  makeStyles
+  makeStyles,
+  CardActions,
+  IconButton
 } from '@material-ui/core';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
+import UploadAvatarModal from './UploadAvatarModal';
+import { PhotoCamera } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -49,6 +39,16 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
     country: 'USA'
   });
 
+  const [openUploadPicture, setOpenUploadPicture] = React.useState(false);
+
+  const handleClickOpenUploadPicture = () => {
+    setOpenUploadPicture(true);
+  };
+
+  const handleCloseUploadPicture = () => {
+    setOpenUploadPicture(false);
+  };
+
   const handleChange = (event: { target: { name: any; value: any } }) => {
     setValues({
       ...values,
@@ -63,7 +63,22 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
       className={clsx(classes.root, className)}
       {...rest}>
       <Card>
-        <CardHeader subheader="The information can be edited" title="Profile" />
+        <Box display="flex" justifyContent="space-between" p={2}>
+          <CardHeader
+            subheader="The information can be edited"
+            title="Profile"
+          />
+          <CardActions>
+            <IconButton
+              onClick={handleClickOpenUploadPicture}
+              color="primary"
+              aria-label="upload picture"
+              component="span">
+              <PhotoCamera />
+            </IconButton>
+          </CardActions>
+        </Box>
+
         <Divider />
         <CardContent>
           <Grid container spacing={3}>
@@ -112,35 +127,6 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
                 variant="outlined"
               />
             </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined">
-                {states.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -150,6 +136,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           </Button>
         </Box>
       </Card>
+      <UploadAvatarModal
+        open={openUploadPicture}
+        handleClose={handleCloseUploadPicture}
+      />
     </form>
   );
 };

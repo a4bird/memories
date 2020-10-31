@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  Redirect,
+  useHistory,
+  useRouteMatch
+} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
+
+import AccountView from 'src/views/account/AccountView';
+import CustomerListView from 'src/views/customer/CustomerListView';
+import DashboardView from 'src/views/reports/DashboardView';
+import ProductListView from 'src/views/product/ProductListView';
+import SettingsView from 'src/views/settings/SettingsView';
 import { useLogoutMutation } from 'src/graphql/generated/types';
 import { useAuthDispatch, AuthEvent } from 'src/context/Auth';
 
@@ -38,7 +50,8 @@ const useStyles = makeStyles(theme => ({
 const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const navigate = useNavigate();
+  const history = useHistory();
+  const { path } = useRouteMatch();
   const dispatch = useAuthDispatch();
   const [logout] = useLogoutMutation();
 
@@ -52,7 +65,7 @@ const DashboardLayout = () => {
           isAuthenticated: false
         }
       });
-      navigate('/login', { replace: true });
+      // history.push('/login', { replace: true });
     } catch (e) {
       // TODO: Handle exception
     }
@@ -71,7 +84,26 @@ const DashboardLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Outlet />
+            <Switch>
+              <Route path={`${path}/account`}>
+                <AccountView />
+              </Route>
+              <Route path={`${path}/customers`} exact>
+                <CustomerListView />
+              </Route>
+              <Route path={`${path}/dashboard`} exact>
+                <DashboardView />
+              </Route>
+              <Route path="/products">
+                <ProductListView />
+              </Route>
+              <Route path="/settings">
+                <SettingsView />
+              </Route>
+              <Route path="*">
+                <Redirect to="/404" />
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>

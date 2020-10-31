@@ -1,13 +1,33 @@
-import React from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import React, { ReactNode } from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import { useAuthState } from 'src/context/Auth';
 
-const ProtectedRoute = ({ ...rest }) => {
+const ProtectedRoute = ({
+  children,
+  ...rest
+}: {
+  path: string;
+  children: ReactNode;
+}) => {
   const authState = useAuthState();
 
-  if (!authState.isAuthenticated) return <Navigate to="/login" />;
-
-  return <Route {...rest}></Route>;
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        authState.isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
 };
 
 export default ProtectedRoute;

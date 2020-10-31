@@ -1,4 +1,7 @@
 fragment UserAccount on UserAccount {
   id
   email
+  profile {
+    ...UserProfile
+  }
 }

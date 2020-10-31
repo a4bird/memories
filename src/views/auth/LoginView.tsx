@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  Redirect,
+  useHistory,
+  useLocation
+} from 'react-router-dom';
+
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -44,7 +50,7 @@ type LoginFormData = {
 
 const LoginView: React.FC = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const history = useHistory();
   const dispatch = useAuthDispatch();
   const authState = useAuthState();
   const [login] = useLoginMutation();
@@ -56,11 +62,7 @@ const LoginView: React.FC = () => {
     resolver: yupResolver(validationSchema)
   });
 
-  useEffect(() => {
-    if (authState.isAuthenticated) {
-      navigate('/app/dashboard', { replace: true });
-    }
-  }, [authState.isAuthenticated, navigate]);
+  const location = useLocation();
 
   const onSubmit = async (values: LoginFormData) => {
     const response = await login({
@@ -73,19 +75,29 @@ const LoginView: React.FC = () => {
     if (response.data?.login?.errors) {
       console.log('Login Errors', toErrorMap(response.data.login.errors));
     } else if (response.data?.login?.userAccount) {
+      const { userAccount } = response.data.login;
       dispatch({
         type: AuthEvent.LOGIN,
         payload: {
-          userAccount: response.data?.login?.userAccount
+          userAccount: {
+            id: userAccount.id,
+            email: userAccount.email,
+            profile: {
+              firstName: userAccount.profile?.firstName,
+              lastName: userAccount.profile?.lastName
+            }
+          }
         }
       });
-      navigate('/app/dashboard', { replace: true });
+      history.push('/app/dashboard', { replace: true });
     }
   };
 
-  return authState.isAuthenticated ? (
-    <div>Loading...</div>
-  ) : (
+  if (authState.isAuthenticated) {
+    return <Redirect to={location.state?.from || '/'} />;
+  }
+
+  return (
     <Page className={classes.root} title="Login">
       <Box
         display="flex"

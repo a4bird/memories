@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
 
 const RegisterView: React.FC = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  const history = useHistory();
   const [registerUser] = useRegisterMutation();
   const { register, formState, control, errors, handleSubmit } = useForm<
     RegisterFormData
@@ -73,7 +73,7 @@ const RegisterView: React.FC = () => {
     if (response.data?.register?.errors) {
       console.log('Register Errors', toErrorMap(response.data.register.errors));
     } else if (response.data?.register?.userAccount) {
-      navigate('/app/login', { replace: true });
+      history.push('/app/login', { replace: true });
     }
   };
 
