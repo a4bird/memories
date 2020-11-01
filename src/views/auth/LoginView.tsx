@@ -24,15 +24,6 @@ import { toErrorMap } from 'src/utils/toErrorMap';
 import { useAuthState, useAuthDispatch, AuthEvent } from 'src/context/Auth';
 import { Controller, useForm } from 'react-hook-form';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    height: '100%',
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
-  }
-}));
-
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Must be a valid email')
@@ -47,6 +38,15 @@ type LoginFormData = {
   email: string;
   password: string;
 };
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+    height: '100%',
+    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(3)
+  }
+}));
 
 const LoginView: React.FC = () => {
   const classes = useStyles();

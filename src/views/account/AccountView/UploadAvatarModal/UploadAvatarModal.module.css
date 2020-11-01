@@ -1,0 +1,41 @@
+.photoModalShell {
+  display: flex;
+  justify-content: center;
+}
+.photoModalShell > .dropZone {
+  width: 250px;
+  height: 250px;
+  border-width: 2px;
+  border-color: #757e84;
+  border-style: dashed;
+  border-radius: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.photoModalShell > .avatar-editor {
+  display: flex;
+  flex-direction: column;
+}
+.photoModalShell > .avatar-editor .avatar-editor-background {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background-image: linear-gradient(45deg, #a3a9ad 25%, transparent 25%),
+    linear-gradient(-45deg, #a3a9ad 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #a3a9ad 75%),
+    linear-gradient(-45deg, transparent 75%, #a3a9ad 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+.photoModalShell > .avatar-editor .close-action {
+  position: absolute;
+  right: 5px;
+  color: white;
+}
+.photoModalShell > .avatar-editor > .avatar-slider-shell {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: 5px;
+}

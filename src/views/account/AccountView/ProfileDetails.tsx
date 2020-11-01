@@ -14,7 +14,7 @@ import {
   IconButton
 } from '@material-ui/core';
 
-import UploadAvatarModal from './UploadAvatarModal';
+import UploadAvatarModal from './UploadAvatarModal/UploadAvatarModal';
 import { PhotoCamera } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
