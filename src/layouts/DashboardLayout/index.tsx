@@ -58,6 +58,7 @@ const DashboardLayout = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      history.push('/login', { replace: true });
       // redirect to login page
       dispatch({
         type: AuthEvent.LOGOUT,
@@ -65,7 +66,6 @@ const DashboardLayout = () => {
           isAuthenticated: false
         }
       });
-      // history.push('/login', { replace: true });
     } catch (e) {
       // TODO: Handle exception
     }

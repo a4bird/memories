@@ -1,7 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-
+import ReactAvatarEditor, { Position } from 'react-avatar-editor';
+import InputRange, { Range } from 'react-input-range';
 import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+
+import 'react-input-range/lib/css/index.css';
+
+import CancelIcon from '@material-ui/icons/Cancel';
+import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -70,6 +76,32 @@ const avatarModalStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  avatarEditor: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  avatarEditorBg: {
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'relative',
+    backgroundImage: `linear-gradient(45deg, #a3a9ad 25%, transparent 25%),
+    linear-gradient(-45deg, #a3a9ad 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #a3a9ad 75%),
+    linear-gradient(-45deg, transparent 75%, #a3a9ad 75%)`,
+    backgroundSize: '20px 20px',
+    backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+  },
+  avatarEditorClose: {
+    position: 'absolute',
+    right: '5px',
+    color: 'white'
+  },
+  avatarSliderShell: {
+    display: 'flex',
+    justifyContent: 'center',
+    position: 'relative',
+    marginTop: '5px'
   }
 }));
 
@@ -80,9 +112,26 @@ export default function UploadAvatarModal({
   open: boolean;
   handleClose: () => void;
 }) {
-  const classes: Record<'root' | 'dropZone', string> = avatarModalStyles();
+  const [avatar, setAvatar] = useState<{
+    file: unknown;
+    preview: string;
+  } | null>(null);
+
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [scale, setScale] = useState<number | Range>(1);
+  const [position, setPosition] = useState<Position>();
+
+  const editorRef = useRef<ReactAvatarEditor>(null);
+
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
+    if (acceptedFiles.length === 0) return;
+    const file = acceptedFiles[0];
+    const image = {
+      file,
+      preview: URL.createObjectURL(file)
+    };
+    setAvatar(image);
   }, []);
   const {
     getRootProps,
@@ -92,6 +141,33 @@ export default function UploadAvatarModal({
     isDragReject
   } = useDropzone({ onDrop });
 
+  const uploadPhoto = () => {
+    if (editorRef.current == null) return;
+    const avatarCanvas = editorRef.current.getImageScaledToCanvas();
+    setIsProcessing(true);
+
+    // TODO: Make graphql call to upload image file
+    // Service.uploadPhotoPromise(avatarCanvas)
+    //   .then(response => {
+    //     this.setState({ isProcessing: false });
+    //     this.props.addNotification(response.message, NotificationTypes.SUCCESS);
+    //     this.props.uploadPhoto(avatarCanvas);
+    //   })
+    //   .catch(error => {
+    //     this.setState({ isProcessing: false });
+    //     this.props.addNotification(error.message, NotificationTypes.ERROR);
+    //   });
+  };
+
+  const classes: Record<
+    | 'root'
+    | 'dropZone'
+    | 'avatarEditor'
+    | 'avatarEditorBg'
+    | 'avatarEditorClose'
+    | 'avatarSliderShell',
+    string
+  > = avatarModalStyles();
   let styles = {};
   if (isDragActive) {
     styles = {
@@ -106,6 +182,7 @@ export default function UploadAvatarModal({
       backgroundColor: '#eee'
     };
   }
+
   return (
     <Dialog
       onClose={handleClose}
@@ -115,17 +192,64 @@ export default function UploadAvatarModal({
         Upload Profile Picture
       </DialogTitle>
       <DialogContent dividers>
-        <div className={classes.root}>
-          <div className={classes.dropZone} style={styles} {...getRootProps()}>
-            <input {...getInputProps()} />
-            <div style={{ textAlign: 'center' }}>
-              {' '}
-              {isDragAccept ? 'Drop' : 'Drag'} your photo here or click to
-              browse image for upload...
+        {avatar === null ? (
+          <div className={classes.root}>
+            <div
+              className={classes.dropZone}
+              style={styles}
+              {...getRootProps()}>
+              <input {...getInputProps()} />
+              <div style={{ textAlign: 'center' }}>
+                {' '}
+                {isDragAccept ? 'Drop' : 'Drag'} your photo here or click to
+                browse image for upload...
+              </div>
+              {isDragReject && <div>Unsupported file type...</div>}
             </div>
-            {isDragReject && <div>Unsupported file type...</div>}
           </div>
-        </div>
+        ) : (
+          <div className={classes.avatarEditor}>
+            <div className={classes.avatarEditorBg}>
+              <ReactAvatarEditor
+                width={256}
+                height={256}
+                ref={editorRef}
+                image={avatar.preview}
+                position={position}
+                scale={typeof scale === 'object' ? scale.max : scale}
+                onPositionChange={position => setPosition(position)}
+              />
+              <span className={classes.avatarEditorClose}>
+                {isProcessing ? (
+                  <div>Loading...</div>
+                ) : (
+                  <CancelIcon
+                    fontSize="small"
+                    onClick={() => setAvatar(null)}
+                    role="button"
+                    tabIndex={0}
+                  />
+                )}
+              </span>
+            </div>
+            <div className={classes.avatarSliderShell}>
+              <span style={{ marginRight: '10px' }}>
+                <ImageIcon fontSize="small" />
+              </span>
+              <InputRange
+                formatLabel={() => ''}
+                maxValue={5}
+                minValue={1}
+                step={0.1}
+                value={scale}
+                onChange={value => setScale(value)}
+              />
+              <span style={{ marginLeft: '10px' }}>
+                <ImageIcon fontSize="large" />
+              </span>
+            </div>
+          </div>
+        )}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color="primary">

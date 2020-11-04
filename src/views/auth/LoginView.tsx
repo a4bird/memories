@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Link as RouterLink,
   Redirect,
@@ -57,7 +57,7 @@ const LoginView: React.FC = () => {
   const { formState, control, errors, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
       email: 'ab.1303@gmail.com',
-      password: 'test123'
+      password: 'test@1234'
     },
     resolver: yupResolver(validationSchema)
   });
@@ -94,7 +94,7 @@ const LoginView: React.FC = () => {
   };
 
   if (authState.isAuthenticated) {
-    return <Redirect to={location.state?.from || '/'} />;
+    return <Redirect to={location.state?.from || '/app/dashboard'} />;
   }
 
   return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Grid, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
 
 const useStyles = makeStyles(theme => ({
