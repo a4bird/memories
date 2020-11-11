@@ -14,6 +14,7 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
+import { useFileUploadMutation } from 'src/graphql/generated/types';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -117,10 +118,8 @@ export default function UploadAvatarModal({
     preview: string;
   } | null>(null);
 
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [scale, setScale] = useState<number | Range>(1);
   const [position, setPosition] = useState<Position>();
-
   const editorRef = useRef<ReactAvatarEditor>(null);
 
   const onDrop = useCallback(acceptedFiles => {
@@ -133,6 +132,7 @@ export default function UploadAvatarModal({
     };
     setAvatar(image);
   }, []);
+
   const {
     getRootProps,
     getInputProps,
@@ -140,24 +140,6 @@ export default function UploadAvatarModal({
     isDragAccept,
     isDragReject
   } = useDropzone({ onDrop });
-
-  const uploadPhoto = () => {
-    if (editorRef.current == null) return;
-    const avatarCanvas = editorRef.current.getImageScaledToCanvas();
-    setIsProcessing(true);
-
-    // TODO: Make graphql call to upload image file
-    // Service.uploadPhotoPromise(avatarCanvas)
-    //   .then(response => {
-    //     this.setState({ isProcessing: false });
-    //     this.props.addNotification(response.message, NotificationTypes.SUCCESS);
-    //     this.props.uploadPhoto(avatarCanvas);
-    //   })
-    //   .catch(error => {
-    //     this.setState({ isProcessing: false });
-    //     this.props.addNotification(error.message, NotificationTypes.ERROR);
-    //   });
-  };
 
   const classes: Record<
     | 'root'
@@ -182,6 +164,31 @@ export default function UploadAvatarModal({
       backgroundColor: '#eee'
     };
   }
+
+  const [mutate, { loading, error }] = useFileUploadMutation();
+
+  const uploadPhoto = () => {
+    if (editorRef.current == null) return;
+    const canvas = editorRef.current.getImageScaledToCanvas();
+
+    const dataURL = canvas.toDataURL('image/png');
+    const blobBin = atob(dataURL.split(',')[1]);
+    const array = [];
+    for (let i = 0; i < blobBin.length; i++) {
+      array.push(blobBin.charCodeAt(i));
+    }
+    const file = new Blob([new Uint8Array(array)], { type: 'image/png' });
+    const imageFile = dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+
+    mutate({
+      variables: {
+        file: file
+      }
+    });
+  };
+
+  if (loading) return <div>UpLoading file...</div>;
+  if (error) return <div>{JSON.stringify(error, null, 2)}</div>;
 
   return (
     <Dialog
@@ -220,7 +227,7 @@ export default function UploadAvatarModal({
                 onPositionChange={position => setPosition(position)}
               />
               <span className={classes.avatarEditorClose}>
-                {isProcessing ? (
+                {loading ? (
                   <div>Loading...</div>
                 ) : (
                   <CancelIcon
@@ -252,7 +259,7 @@ export default function UploadAvatarModal({
         )}
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleClose} color="primary">
+        <Button autoFocus onClick={uploadPhoto} color="primary">
           Upload
         </Button>
       </DialogActions>

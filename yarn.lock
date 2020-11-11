@@ -20,6 +20,25 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
+"@apollo/client@^3.1.3", "@apollo/client@^3.2.5":
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.2.5.tgz#24e0a6faa1d231ab44807af237c6227410c75c4d"
+  integrity sha512-zpruxnFMz6K94gs2pqc3sidzFDbQpKT5D6P/J/I9s8ekHZ5eczgnRp6pqXC86Bh7+44j/btpmOT0kwiboyqTnA==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.0.0"
+    "@types/zen-observable" "^0.8.0"
+    "@wry/context" "^0.5.2"
+    "@wry/equality" "^0.2.0"
+    fast-json-stable-stringify "^2.0.0"
+    graphql-tag "^2.11.0"
+    hoist-non-react-statics "^3.3.2"
+    optimism "^0.13.0"
+    prop-types "^15.7.2"
+    symbol-observable "^2.0.0"
+    ts-invariant "^0.4.4"
+    tslib "^1.10.0"
+    zen-observable "^0.8.14"
+
 "@ardatan/aggregate-error@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@ardatan/aggregate-error/-/aggregate-error-0.0.1.tgz#1403ac5de10d8ca689fc1f65844c27179ae1d44f"
@@ -1170,6 +1189,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.12.5":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
+  integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.10.4", "@babel/template@^7.4.0", "@babel/template@^7.8.6":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.10.4.tgz#3251996c4200ebc71d1a8fc405fba940f36ba278"
@@ -1589,6 +1615,11 @@
     aggregate-error "3.1.0"
     is-promise "4.0.0"
     tslib "~2.0.1"
+
+"@graphql-typed-document-node/core@^3.0.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
+  integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
@@ -2085,6 +2116,15 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
+"@types/apollo-upload-client@14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@types/apollo-upload-client/-/apollo-upload-client-14.1.0.tgz#21a57d7e3f29ff946ba51a53b3d7da46ddd21fbc"
+  integrity sha512-ZLvcEqu+l9qKGdrIpASt/A2WY1ghAC9L3qaoegkiBOccjxvQmWN9liZzVFiuHTuWseWpVbMklqbs/z+KEjll9Q==
+  dependencies:
+    "@apollo/client" "^3.1.3"
+    "@types/extract-files" "*"
+    graphql "^15.3.0"
+
 "@types/aria-query@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.0.tgz#14264692a9d6e2fa4db3df5e56e94b5e25647ac0"
@@ -2132,6 +2172,11 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
+
+"@types/extract-files@*":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@types/extract-files/-/extract-files-8.1.0.tgz#4728440e1d92a6d1d11ac47f5a10e3f9ce47f044"
+  integrity sha512-ulxvlFU71yLVV3JxdBgryASAIp+aZQuQOpkhU1SznJlcWz0qsJCWHqdJqP6Lprs3blqGS5FH5GbBkU0977+Wew==
 
 "@types/glob@^7.1.1":
   version "7.1.3"
@@ -2817,6 +2862,15 @@ apollo-link@^1.2.3:
     ts-invariant "^0.4.0"
     tslib "^1.9.3"
     zen-observable-ts "^0.8.21"
+
+apollo-upload-client@14.1.3:
+  version "14.1.3"
+  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-14.1.3.tgz#91f39011897bd08e99c0de0164e77ad2f3402247"
+  integrity sha512-X2T+7pHk5lcaaWnvP9h2tuAAMCzOW6/9juedQ0ZuGp3Ufl81BpDISlCs0o6u29wBV0RRT/QpMU2gbP+3FCfVpQ==
+  dependencies:
+    "@apollo/client" "^3.2.5"
+    "@babel/runtime" "^7.12.5"
+    extract-files "^9.0.0"
 
 apollo-utilities@^1.0.25, apollo-utilities@^1.3.0:
   version "1.3.4"
@@ -5632,6 +5686,11 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+extract-files@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-9.0.0.tgz#8a7744f2437f81f5ed3250ed9f1550de902fe54a"
+  integrity sha512-CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==
+
 extsprintf@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
@@ -6245,6 +6304,11 @@ graphql@15.3.0:
   version "15.3.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.3.0.tgz#3ad2b0caab0d110e3be4a5a9b2aa281e362b5278"
   integrity sha512-GTCJtzJmkFLWRfFJuoo9RWWa/FfamUHgiFosxi/X1Ani4AVWbeyBenZTNX6dM+7WSbbFfTo/25eh0LLkwHMw2w==
+
+graphql@^15.3.0:
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.4.0.tgz#e459dea1150da5a106486ba7276518b5295a4347"
+  integrity sha512-EB3zgGchcabbsU9cFe1j+yxdzKQKAbGUWRb13DsrsMN1yyfmmIq+2+L5MqVWcDCE4V89R5AyUOi7sMOGxdsYtA==
 
 growly@^1.3.0:
   version "1.3.0"
@@ -9059,6 +9123,13 @@ optimism@^0.12.1:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.12.1.tgz#933f9467b9aef0e601655adb9638f893e486ad02"
   integrity sha512-t8I7HM1dw0SECitBYAqFOVHoBAHEQBTeKjIL9y9ImHzAVkdyPK4ifTgM4VJRDtTUY4r/u5Eqxs4XcGPHaoPkeQ==
+  dependencies:
+    "@wry/context" "^0.5.2"
+
+optimism@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.13.0.tgz#c08904e1439a0eb9e7f86183dafa06cc715ff351"
+  integrity sha512-6JAh3dH+YUE4QUdsgUw8nUQyrNeBKfAEKOHMlLkQ168KhIYFIxzPsHakWrRXDnTO+x61RJrS3/2uEt6W0xlocA==
   dependencies:
     "@wry/context" "^0.5.2"
 
@@ -12023,6 +12094,11 @@ symbol-observable@^1.0.4, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
+
+symbol-observable@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-2.0.3.tgz#5b521d3d07a43c351055fa43b8355b62d33fd16a"
+  integrity sha512-sQV7phh2WCYAn81oAkakC5qjq2Ml0g8ozqz03wOGnx9dDlG1de6yrF+0RAzSJD8fPUow3PTSMf2SAbOGxb93BA==
 
 symbol-tree@^3.2.2:
   version "3.2.4"

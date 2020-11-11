@@ -15,6 +15,48 @@ export type Scalars = {
   Upload: any;
 };
 
+/** Uploaded File Response */
+export type UploadedFileResponse = {
+  __typename?: 'UploadedFileResponse';
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  encoding: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  singleUpload: UploadedFileResponse;
+  login?: Maybe<LoginOutput>;
+  register?: Maybe<RegisterOutput>;
+  logout?: Maybe<Scalars['Void']>;
+  saveProfile?: Maybe<UserProfileOutput>;
+};
+
+
+export type MutationSingleUploadArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type MutationRegisterArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
+export type MutationSaveProfileArgs = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  gender: Gender;
+};
+
 
 export type Error = {
   __typename?: 'Error';
@@ -50,33 +92,6 @@ export type LoginOutput = {
 export type MeOutput = {
   __typename?: 'MeOutput';
   userAccount?: Maybe<UserAccount>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  login?: Maybe<LoginOutput>;
-  register?: Maybe<RegisterOutput>;
-  logout?: Maybe<Scalars['Void']>;
-  saveProfile?: Maybe<UserProfileOutput>;
-};
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
-
-export type MutationRegisterArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
-
-export type MutationSaveProfileArgs = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  gender: Gender;
 };
 
 /** Gender Enum */
@@ -151,6 +166,19 @@ export type UserAccountFragment = (
 export type UserProfileFragment = (
   { __typename?: 'UserProfile' }
   & Pick<UserProfile, 'firstName' | 'lastName'>
+);
+
+export type FileUploadMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type FileUploadMutation = (
+  { __typename?: 'Mutation' }
+  & { singleUpload: (
+    { __typename?: 'UploadedFileResponse' }
+    & Pick<UploadedFileResponse, 'filename' | 'mimetype' | 'encoding' | 'url'>
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -250,6 +278,41 @@ export const RegisterOutputFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${UserAccountFragmentDoc}`;
+export const FileUploadDocument = gql`
+    mutation fileUpload($file: Upload!) {
+  singleUpload(file: $file) {
+    filename
+    mimetype
+    encoding
+    url
+  }
+}
+    `;
+export type FileUploadMutationFn = Apollo.MutationFunction<FileUploadMutation, FileUploadMutationVariables>;
+
+/**
+ * __useFileUploadMutation__
+ *
+ * To run a mutation, you first call `useFileUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFileUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fileUploadMutation, { data, loading, error }] = useFileUploadMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useFileUploadMutation(baseOptions?: Apollo.MutationHookOptions<FileUploadMutation, FileUploadMutationVariables>) {
+        return Apollo.useMutation<FileUploadMutation, FileUploadMutationVariables>(FileUploadDocument, baseOptions);
+      }
+export type FileUploadMutationHookResult = ReturnType<typeof useFileUploadMutation>;
+export type FileUploadMutationResult = Apollo.MutationResult<FileUploadMutation>;
+export type FileUploadMutationOptions = Apollo.BaseMutationOptions<FileUploadMutation, FileUploadMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(email: $usernameOrEmail, password: $password) {
