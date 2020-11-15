@@ -93,17 +93,17 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
 
   const { userAccount } = useAuthState();
 
-  const content = (
+  const content = userAccount && userAccount.profile && (
     <Box height="100%" display="flex" flexDirection="column">
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
+          src={userAccount.profile.avatar}
           to="/app/account"
         />
         <Typography color="textPrimary" variant="h5">
-          {`${userAccount?.profile?.firstName} ${userAccount?.profile?.lastName}`}
+          {`${userAccount.profile.firstName} ${userAccount.profile.lastName}`}
         </Typography>
         <Typography color="textSecondary" variant="body2">
           {user.jobTitle}

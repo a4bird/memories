@@ -15,6 +15,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import { useFileUploadMutation } from 'src/graphql/generated/types';
+import { ProfileEvent, useAuthDispatch } from 'src/context/Auth';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -113,6 +114,7 @@ export default function UploadAvatarModal({
   open: boolean;
   handleClose: () => void;
 }) {
+  const dispatch = useAuthDispatch();
   const [avatar, setAvatar] = useState<{
     file: unknown;
     preview: string;
@@ -165,20 +167,33 @@ export default function UploadAvatarModal({
     };
   }
 
-  const [mutate, { loading, error }] = useFileUploadMutation();
+  const [mutate, { loading, error }] = useFileUploadMutation({
+    onCompleted(data) {
+      console.log('File uploaded on Url', data.singleUpload.url);
+      handleClose();
+    }
+  });
 
   const uploadPhoto = () => {
     if (editorRef.current == null) return;
     const canvas = editorRef.current.getImageScaledToCanvas();
 
-    const dataURL = canvas.toDataURL('image/png');
+    const mime = 'image/jpg';
+    const dataURL = canvas.toDataURL(mime);
+
+    dispatch({
+      type: ProfileEvent.CHANGE_AVATAR,
+      payload: {
+        avatar: dataURL
+      }
+    });
+
     const blobBin = atob(dataURL.split(',')[1]);
     const array = [];
     for (let i = 0; i < blobBin.length; i++) {
       array.push(blobBin.charCodeAt(i));
     }
-    const file = new Blob([new Uint8Array(array)], { type: 'image/png' });
-    const imageFile = dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+    const file = new Blob([new Uint8Array(array)], { type: mime });
 
     mutate({
       variables: {

@@ -5,6 +5,7 @@ import ActionMap from '../utils/actionMap';
 type UserProfile = {
   firstName?: string;
   lastName?: string;
+  avatar?: string;
 };
 
 type UserAccount = {
@@ -24,6 +25,10 @@ export enum AuthEvent {
   LOGOUT = 'AUTH/LOGOUT'
 }
 
+export enum ProfileEvent {
+  CHANGE_AVATAR = 'PROFILE/CHANGE_AVATAR'
+}
+
 type Messages = {
   [AuthEvent.LOGIN]: {
     userAccount: UserAccount;
@@ -32,6 +37,9 @@ type Messages = {
     userAccount: UserAccount;
   };
   [AuthEvent.LOGOUT]: {};
+  [ProfileEvent.CHANGE_AVATAR]: {
+    avatar: string;
+  };
 };
 
 type Actions = ActionMap<Messages>[keyof ActionMap<Messages>];
@@ -52,6 +60,24 @@ const authReducer = (state: AuthState, action: Actions): AuthState => {
       return {
         isAuthenticated: false,
         userAccount: null
+      };
+    case ProfileEvent.CHANGE_AVATAR:
+      if (!state.userAccount || !state.userAccount.profile) {
+        return {
+          isAuthenticated: false,
+          userAccount: null
+        };
+      }
+
+      return {
+        isAuthenticated: state.isAuthenticated,
+        userAccount: {
+          ...state.userAccount,
+          profile: {
+            ...state.userAccount.profile,
+            avatar: action.payload.avatar
+          }
+        }
       };
   }
 };
