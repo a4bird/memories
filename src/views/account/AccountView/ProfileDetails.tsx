@@ -136,10 +136,12 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           </Button>
         </Box>
       </Card>
-      <UploadAvatarModal
-        open={openUploadPicture}
-        handleClose={handleCloseUploadPicture}
-      />
+      {openUploadPicture && (
+        <UploadAvatarModal
+          open={openUploadPicture}
+          handleClose={handleCloseUploadPicture}
+        />
+      )}
     </form>
   );
 };

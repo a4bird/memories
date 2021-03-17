@@ -1,11 +1,11 @@
 name: Build
 
 on:
-  push:
-    branches: [master]
+  #   push:
+  #     branches: [master]
+  #   pull_request:
+  #     branches: [master, "feature/*"]
   workflow_dispatch:
-  pull_request:
-    branches: [master, "feature/*"]
 
 env:
   PROJECT: a4bird-memories
@@ -85,7 +85,7 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
           always-auth: true
-          scope: "@a4bird"
+          scope: '@a4bird'
           registry-url: https://npm.pkg.github.com
 
       - name: Get yarn cache directory path
@@ -131,9 +131,9 @@ jobs:
             previews: 
               - ant-man
           ref: ${{ github.ref }}
-          environment: "Development"
+          environment: 'Development'
           auto_merge: false
-          required_contexts: "[]"
+          required_contexts: '[]'
           production_environment: false
           version: ${{ format('1.0.0.{0}', github.run_number) }}
         env:

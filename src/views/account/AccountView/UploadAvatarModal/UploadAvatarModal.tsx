@@ -2,10 +2,11 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ReactAvatarEditor, { Position } from 'react-avatar-editor';
 import InputRange, { Range } from 'react-input-range';
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 import 'react-input-range/lib/css/index.css';
 
+import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
@@ -14,7 +15,7 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import { useFileUploadMutation } from 'src/graphql/generated/types';
+import { useS3PutPreSignedUrlMutation } from 'src/graphql/generated/types';
 import { ProfileEvent, useAuthDispatch } from 'src/context/Auth';
 
 const styles = (theme: Theme) => ({
@@ -114,12 +115,14 @@ export default function UploadAvatarModal({
   open: boolean;
   handleClose: () => void;
 }) {
+  const mime = 'image/jpg';
   const dispatch = useAuthDispatch();
   const [avatar, setAvatar] = useState<{
     file: unknown;
     preview: string;
   } | null>(null);
 
+  const [imageDataUrl, setImageDataUrl] = useState<string>();
   const [scale, setScale] = useState<number | Range>(1);
   const [position, setPosition] = useState<Position>();
   const editorRef = useRef<ReactAvatarEditor>(null);
@@ -167,37 +170,50 @@ export default function UploadAvatarModal({
     };
   }
 
-  const [mutate, { loading, error }] = useFileUploadMutation({
+  // const signedRequest =
+  //   'https://my-memories-bucket.s3.ap-southeast-2.amazonaws.com/profile-pic?AWSAccessKeyId=AKIA6MYFLBJ6KULNFUXQ&Content-Type=image%2Fjpg&Expires=1615115974&Signature=WXYSH9GuWeIRZep%2BM%2FXwQVdEkpk%3D&x-amz-acl=public-read';
+  const [mutate, { loading, error }] = useS3PutPreSignedUrlMutation({
     onCompleted(data) {
-      console.log('File uploaded on Url', data.singleUpload.url);
+      const signedRequest = data.s3PutPreSignedUrl.signedRequest;
+
+      dispatch({
+        type: ProfileEvent.CHANGE_AVATAR,
+        payload: {
+          avatar: imageDataUrl!
+        }
+      });
+
+      const blobBin = atob(imageDataUrl!.split(',')[1]);
+      const array = [];
+      for (let i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+      }
+      const file = new Blob([new Uint8Array(array)], { type: mime });
+
+      const options = {
+        headers: {
+          'Content-Type': file.type
+        }
+      };
+      axios.put(signedRequest, file, options);
+
       handleClose();
     }
   });
 
-  const uploadPhoto = () => {
+  const uploadPhoto = async () => {
+    // TODO: A mutation just for profile-pic
+
     if (editorRef.current == null) return;
     const canvas = editorRef.current.getImageScaledToCanvas();
 
-    const mime = 'image/jpg';
     const dataURL = canvas.toDataURL(mime);
-
-    dispatch({
-      type: ProfileEvent.CHANGE_AVATAR,
-      payload: {
-        avatar: dataURL
-      }
-    });
-
-    const blobBin = atob(dataURL.split(',')[1]);
-    const array = [];
-    for (let i = 0; i < blobBin.length; i++) {
-      array.push(blobBin.charCodeAt(i));
-    }
-    const file = new Blob([new Uint8Array(array)], { type: mime });
+    setImageDataUrl(dataURL);
 
     mutate({
       variables: {
-        file: file
+        filename: 'profile-pic',
+        filetype: mime
       }
     });
   };

@@ -1,0 +1,7 @@
+https://stackoverflow.com/questions/52135815/yarn-is-having-troubles-with-the-network-connection
+
+ yarn cache clean
+
+
+
+ yarn install --network-timeout 1000000

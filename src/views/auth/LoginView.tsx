@@ -56,8 +56,8 @@ const LoginView: React.FC = () => {
   const [login] = useLoginMutation();
   const { formState, control, errors, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
-      email: 'ab.1303@gmail.com',
-      password: 'test@1234'
+      email: 'ab1303@gmail.com',
+      password: 'Test@1234'
     },
     resolver: yupResolver(validationSchema)
   });
