@@ -98,6 +98,7 @@ export type UserAccount = {
   id: Scalars['ID'];
   email: Scalars['String'];
   profile?: Maybe<UserProfile>;
+  photoUrl?: Maybe<Scalars['String']>;
 };
 
 export type RegisterOutput = {
@@ -117,14 +118,6 @@ export type MeOutput = {
   userAccount?: Maybe<UserAccount>;
 };
 
-/** Gender Enum */
-export enum Gender {
-  Male = 'MALE',
-  Female = 'FEMALE',
-  Other = 'OTHER',
-  Na = 'NA'
-}
-
 /** User Profile */
 export type UserProfile = {
   __typename?: 'UserProfile';
@@ -143,6 +136,14 @@ export type UserProfileOutput = {
   userProfile?: Maybe<UserProfile>;
   errors?: Maybe<Array<Error>>;
 };
+
+/** Gender Enum */
+export enum Gender {
+  Male = 'MALE',
+  Female = 'FEMALE',
+  Other = 'OTHER',
+  Na = 'NA'
+}
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -179,7 +180,7 @@ export type RegisterOutputFragment = (
 
 export type UserAccountFragment = (
   { __typename?: 'UserAccount' }
-  & Pick<UserAccount, 'id' | 'email'>
+  & Pick<UserAccount, 'id' | 'email' | 'photoUrl'>
   & { profile?: Maybe<(
     { __typename?: 'UserProfile' }
     & UserProfileFragment
@@ -275,6 +276,7 @@ export const UserAccountFragmentDoc = gql`
     fragment UserAccount on UserAccount {
   id
   email
+  photoUrl
   profile {
     ...UserProfile
   }

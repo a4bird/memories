@@ -82,9 +82,10 @@ const LoginView: React.FC = () => {
           userAccount: {
             id: userAccount.id,
             email: userAccount.email,
+            photoUrl: userAccount.photoUrl || '',
             profile: {
-              firstName: userAccount.profile?.firstName,
-              lastName: userAccount.profile?.lastName
+              firstName: userAccount.profile?.firstName || '',
+              lastName: userAccount.profile?.lastName || ''
             }
           }
         }

@@ -5,12 +5,12 @@ import ActionMap from '../utils/actionMap';
 type UserProfile = {
   firstName?: string;
   lastName?: string;
-  avatar?: string;
 };
 
 type UserAccount = {
   id: string;
   email: string;
+  photoUrl: string;
   profile?: UserProfile;
 };
 
@@ -73,9 +73,9 @@ const authReducer = (state: AuthState, action: Actions): AuthState => {
         isAuthenticated: state.isAuthenticated,
         userAccount: {
           ...state.userAccount,
+          photoUrl: action.payload.avatar,
           profile: {
-            ...state.userAccount.profile,
-            avatar: action.payload.avatar
+            ...state.userAccount.profile
           }
         }
       };

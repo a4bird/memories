@@ -24,9 +24,10 @@ const App: React.FC = () => {
           userAccount: {
             id: data.me.userAccount.id,
             email: data.me.userAccount.email,
+            photoUrl: data.me.userAccount.photoUrl || '',
             profile: {
-              firstName: data.me.userAccount.profile?.firstName,
-              lastName: data.me.userAccount.profile?.lastName
+              firstName: data.me.userAccount.profile?.firstName || '',
+              lastName: data.me.userAccount.profile?.lastName || ''
             }
           }
         }

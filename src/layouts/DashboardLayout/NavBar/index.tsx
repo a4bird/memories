@@ -73,6 +73,9 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
     width: 64,
     height: 64
+  },
+  name: {
+    margin: '5px 0px 0px 0px'
   }
 }));
 
@@ -99,10 +102,10 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={userAccount.profile.avatar}
+          src={userAccount.photoUrl}
           to="/app/account"
         />
-        <Typography color="textPrimary" variant="h5">
+        <Typography className={classes.name} color="textPrimary" variant="h5">
           {`${userAccount.profile.firstName} ${userAccount.profile.lastName}`}
         </Typography>
         <Typography color="textSecondary" variant="body2">

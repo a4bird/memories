@@ -1,6 +1,7 @@
 fragment UserAccount on UserAccount {
   id
   email
+  photoUrl
   profile {
     ...UserProfile
   }
