@@ -1,0 +1,9 @@
+fragment UserProfileOutput on UserProfileOutput {
+  errors {
+    ...Error
+  }
+  userProfile {
+    ...UserProfile
+    gender
+  }
+}

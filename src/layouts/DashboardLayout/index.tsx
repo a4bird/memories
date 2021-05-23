@@ -94,10 +94,10 @@ const DashboardLayout = () => {
               <Route path={`${path}/dashboard`} exact>
                 <DashboardView />
               </Route>
-              <Route path="/products">
+              <Route path={`${path}/products`}>
                 <ProductListView />
               </Route>
-              <Route path="/settings">
+              <Route path={`${path}/settings`}>
                 <SettingsView />
               </Route>
               <Route path="*">

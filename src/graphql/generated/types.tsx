@@ -91,6 +91,7 @@ export type Query = {
   __typename?: 'Query';
   _dummy?: Maybe<Scalars['Boolean']>;
   me?: Maybe<MeOutput>;
+  getUserProfile?: Maybe<UserProfileOutput>;
 };
 
 export type UserAccount = {
@@ -192,6 +193,18 @@ export type UserProfileFragment = (
   & Pick<UserProfile, 'firstName' | 'lastName'>
 );
 
+export type UserProfileOutputFragment = (
+  { __typename?: 'UserProfileOutput' }
+  & { errors?: Maybe<Array<(
+    { __typename?: 'Error' }
+    & ErrorFragment
+  )>>, userProfile?: Maybe<(
+    { __typename?: 'UserProfile' }
+    & Pick<UserProfile, 'gender'>
+    & UserProfileFragment
+  )> }
+);
+
 export type S3PutPreSignedUrlMutationVariables = Exact<{
   filename: Scalars['String'];
   filetype: Scalars['String'];
@@ -239,6 +252,35 @@ export type RegisterMutation = (
   & { register?: Maybe<(
     { __typename?: 'RegisterOutput' }
     & RegisterOutputFragment
+  )> }
+);
+
+export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserProfileQuery = (
+  { __typename?: 'Query' }
+  & { getUserProfile?: Maybe<(
+    { __typename?: 'UserProfileOutput' }
+    & { userProfile?: Maybe<(
+      { __typename?: 'UserProfile' }
+      & Pick<UserProfile, 'firstName' | 'lastName' | 'gender'>
+    )> }
+  )> }
+);
+
+export type SaveProfileMutationVariables = Exact<{
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  gender: Gender;
+}>;
+
+
+export type SaveProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { saveProfile?: Maybe<(
+    { __typename?: 'UserProfileOutput' }
+    & UserProfileOutputFragment
   )> }
 );
 
@@ -304,6 +346,18 @@ export const RegisterOutputFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${UserAccountFragmentDoc}`;
+export const UserProfileOutputFragmentDoc = gql`
+    fragment UserProfileOutput on UserProfileOutput {
+  errors {
+    ...Error
+  }
+  userProfile {
+    ...UserProfile
+    gender
+  }
+}
+    ${ErrorFragmentDoc}
+${UserProfileFragmentDoc}`;
 export const S3PutPreSignedUrlDocument = gql`
     mutation s3PutPreSignedUrl($filename: String!, $filetype: String!) {
   s3PutPreSignedUrl(filename: $filename, filetype: $filetype) {
@@ -437,6 +491,79 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const GetUserProfileDocument = gql`
+    query getUserProfile {
+  getUserProfile {
+    userProfile {
+      firstName
+      lastName
+      gender
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserProfileQuery__
+ *
+ * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+      }
+export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+        }
+export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
+export const SaveProfileDocument = gql`
+    mutation SaveProfile($firstName: String!, $lastName: String!, $gender: Gender!) {
+  saveProfile(firstName: $firstName, lastName: $lastName, gender: $gender) {
+    ...UserProfileOutput
+  }
+}
+    ${UserProfileOutputFragmentDoc}`;
+export type SaveProfileMutationFn = Apollo.MutationFunction<SaveProfileMutation, SaveProfileMutationVariables>;
+
+/**
+ * __useSaveProfileMutation__
+ *
+ * To run a mutation, you first call `useSaveProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveProfileMutation, { data, loading, error }] = useSaveProfileMutation({
+ *   variables: {
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *      gender: // value for 'gender'
+ *   },
+ * });
+ */
+export function useSaveProfileMutation(baseOptions?: Apollo.MutationHookOptions<SaveProfileMutation, SaveProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveProfileMutation, SaveProfileMutationVariables>(SaveProfileDocument, options);
+      }
+export type SaveProfileMutationHookResult = ReturnType<typeof useSaveProfileMutation>;
+export type SaveProfileMutationResult = Apollo.MutationResult<SaveProfileMutation>;
+export type SaveProfileMutationOptions = Apollo.BaseMutationOptions<SaveProfileMutation, SaveProfileMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {

@@ -48,9 +48,6 @@ const Profile: React.FC<ProfileProps> = ({ className, ...rest }) => {
           <Typography color="textPrimary" gutterBottom variant="h3">
             {`${profile?.firstName} ${profile?.lastName}`}
           </Typography>
-          <Typography color="textSecondary" variant="body1">
-            {`${user.city} ${user.country}`}
-          </Typography>
           <Typography
             className={classes.dateText}
             color="textSecondary"

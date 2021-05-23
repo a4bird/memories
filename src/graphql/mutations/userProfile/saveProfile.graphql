@@ -1,0 +1,9 @@
+mutation SaveProfile(
+  $firstName: String!
+  $lastName: String!
+  $gender: Gender!
+) {
+  saveProfile(firstName: $firstName, lastName: $lastName, gender: $gender) {
+    ...UserProfileOutput
+  }
+}
