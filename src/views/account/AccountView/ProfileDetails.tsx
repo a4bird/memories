@@ -16,13 +16,14 @@ import {
   CardActions,
   IconButton,
   MenuItem,
-  InputLabel
+  InputLabel,
+  CircularProgress
 } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
+
 import {
   useSaveProfileMutation,
-  useGetUserProfileQuery,
-  UserProfile
+  useGetUserProfileQuery
 } from 'src/graphql/generated/types';
 import { toErrorMap } from 'src/utils/toErrorMap';
 
@@ -30,6 +31,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import UploadAvatarModal from './UploadAvatarModal/UploadAvatarModal';
 import { Gender } from 'src/graphql/generated/types';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -70,7 +72,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
     data: userProfileData
   } = useGetUserProfileQuery();
 
-  const { register, reset, control, formState, errors, handleSubmit } = useForm<
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { reset, control, formState, errors, handleSubmit } = useForm<
     ProfileDetailsFormData
   >({
     defaultValues: {
@@ -82,8 +86,14 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   });
 
   useEffect(() => {
-    // TODO Show toast or something
-    if (userProfileLoading || userProfileError) return;
+    if (userProfileLoading) return;
+
+    if (userProfileError) {
+      enqueueSnackbar(userProfileError, {
+        variant: 'error'
+      });
+      return;
+    }
 
     if (userProfileData?.getUserProfile?.userProfile) {
       reset({
@@ -110,12 +120,19 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
         gender: values.gender!
       }
     });
+
     if (response.data?.saveProfile?.errors) {
-      console.log(
-        'Profile Errors',
-        toErrorMap(response.data.saveProfile.errors)
-      );
+      const errorMapp = toErrorMap(response.data.saveProfile.errors);
+      enqueueSnackbar(errorMapp, {
+        variant: 'error'
+      });
+
+      console.log('Profile Errors', errorMapp);
     }
+
+    enqueueSnackbar('Profile saved!', {
+      variant: 'success'
+    });
   };
 
   return (
@@ -203,13 +220,17 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-            disabled={formState.isSubmitting}>
-            Save details
-          </Button>
+          {formState.isSubmitting ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              disabled={formState.isSubmitting}>
+              Save details
+            </Button>
+          )}
         </Box>
       </Card>
       {openUploadPicture && (

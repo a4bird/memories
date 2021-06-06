@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
+import { SnackbarProvider } from 'notistack';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -12,7 +13,9 @@ ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <App />
+        <SnackbarProvider maxSnack={3}>
+          <App />
+        </SnackbarProvider>
       </AuthProvider>
     </ApolloProvider>
   </Router>,

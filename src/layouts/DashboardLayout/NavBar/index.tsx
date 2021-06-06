@@ -33,15 +33,15 @@ const items = [
     icon: BarChartIcon,
     title: 'Dashboard'
   },
+  // {
+  //   href: '/app/customers',
+  //   icon: UsersIcon,
+  //   title: 'Customers'
+  // },
   {
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
-  },
-  {
-    href: '/app/products',
+    href: '/app/albums',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Albums'
   },
   {
     href: '/app/account',

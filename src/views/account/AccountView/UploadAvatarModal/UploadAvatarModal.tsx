@@ -11,58 +11,14 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
+
 import { useS3PutPreSignedUrlMutation } from 'src/graphql/generated/types';
 import { ProfileEvent, useAuthDispatch } from 'src/context/Auth';
-
-const styles = (theme: Theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-    display: 'flex'
-  },
-  closeButton: {
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500]
-  }
-});
-
-const DialogTitle = withStyles(styles)(
-  (props: {
-    id: string;
-    classes: Record<'root' | 'closeButton', string>;
-    children: React.ReactNode;
-  }) => {
-    const { children, classes, ...other } = props;
-    return (
-      <MuiDialogTitle disableTypography className={classes.root} {...other}>
-        <Typography variant="h3">{children}</Typography>
-      </MuiDialogTitle>
-    );
-  }
-);
-
-const DialogContent = withStyles(theme => ({
-  root: {
-    padding: theme.spacing(2),
-    height: 500,
-    width: 500,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-}))(MuiDialogContent);
-
-const DialogActions = withStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1)
-  }
-}))(MuiDialogActions);
+import {
+  DialogTitle,
+  DialogActions,
+  DialogContent
+} from 'src/components/Dialog';
 
 const avatarModalStyles = makeStyles((theme: Theme) => ({
   root: {

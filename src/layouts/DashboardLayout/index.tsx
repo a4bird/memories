@@ -11,6 +11,7 @@ import NavBar from './NavBar';
 import TopBar from './TopBar';
 
 import AccountView from 'src/views/account/AccountView';
+import AlbumsListView from 'src/views/AlbumsListView';
 import CustomerListView from 'src/views/customer/CustomerListView';
 import DashboardView from 'src/views/reports/DashboardView';
 import ProductListView from 'src/views/product/ProductListView';
@@ -87,6 +88,9 @@ const DashboardLayout = () => {
             <Switch>
               <Route path={`${path}/account`}>
                 <AccountView />
+              </Route>
+              <Route path={`${path}/albums`}>
+                <AlbumsListView />
               </Route>
               <Route path={`${path}/customers`} exact>
                 <CustomerListView />
