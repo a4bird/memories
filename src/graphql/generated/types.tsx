@@ -14,40 +14,162 @@ export type Scalars = {
   Float: number;
   /** Represents NULL values */
   Void: any;
+  /** A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  Date: any;
+  /** A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  Time: any;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: any;
+  /** The javascript `Date` as integer. Type represents date and time as number of milliseconds from start of UNIX epoch. */
+  Timestamp: any;
+  /** A field whose value is a UTC Offset: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones */
+  UtcOffset: any;
+  /**
+   *
+   *     A string representing a duration conforming to the ISO8601 standard,
+   *     such as: P1W1DT13H23M34S
+   *     P is the duration designator (for period) placed at the start of the duration representation.
+   *     Y is the year designator that follows the value for the number of years.
+   *     M is the month designator that follows the value for the number of months.
+   *     W is the week designator that follows the value for the number of weeks.
+   *     D is the day designator that follows the value for the number of days.
+   *     T is the time designator that precedes the time components of the representation.
+   *     H is the hour designator that follows the value for the number of hours.
+   *     M is the minute designator that follows the value for the number of minutes.
+   *     S is the second designator that follows the value for the number of seconds.
+   *
+   *     Note the time designator, T, that precedes the time value.
+   *
+   *     Matches moment.js, Luxon and DateFns implementations
+   *     ,/. is valid for decimal places and +/- is a valid prefix
+   *
+   */
+  ISO8601Duration: any;
+  /** A field whose value conforms to the standard internet email address format as specified in RFC822: https://www.w3.org/Protocols/rfc822/. */
+  EmailAddress: any;
+  /** Floats that will have a value less than 0. */
+  NegativeFloat: any;
+  /** Integers that will have a value less than 0. */
+  NegativeInt: any;
+  /** A string that cannot be passed as an empty value */
+  NonEmptyString: any;
+  /** Floats that will have a value of 0 or more. */
+  NonNegativeFloat: any;
+  /** Integers that will have a value of 0 or more. */
+  NonNegativeInt: any;
+  /** Floats that will have a value of 0 or less. */
+  NonPositiveFloat: any;
+  /** Integers that will have a value of 0 or less. */
+  NonPositiveInt: any;
+  /** A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234. */
+  PhoneNumber: any;
+  /** Floats that will have a value greater than 0. */
+  PositiveFloat: any;
+  /** Integers that will have a value greater than 0. */
+  PositiveInt: any;
+  /** A field whose value conforms to the standard postal code formats for United States, United Kingdom, Germany, Canada, France, Italy, Australia, Netherlands, Spain, Denmark, Sweden, Belgium, India, Austria, Portugal, Switzerland or Luxembourg. */
+  PostalCode: any;
+  /** Floats that will have a value of 0 or more. */
+  UnsignedFloat: any;
+  /** Integers that will have a value of 0 or more. */
+  UnsignedInt: any;
+  /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
+  URL: any;
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  BigInt: any;
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  Long: any;
+  /** The `Byte` scalar type represents byte value as a Buffer */
+  Byte: any;
+  /** A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier. */
+  UUID: any;
+  /** A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier. */
+  GUID: any;
+  /** A field whose value is a hexadecimal: https://en.wikipedia.org/wiki/Hexadecimal. */
+  Hexadecimal: any;
+  /** A field whose value is a hex color code: https://en.wikipedia.org/wiki/Web_colors. */
+  HexColorCode: any;
+  /** A field whose value is a CSS HSL color: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsl()_and_hsla(). */
+  HSL: any;
+  /** A field whose value is a CSS HSLA color: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsl()_and_hsla(). */
+  HSLA: any;
+  /** A field whose value is a IPv4 address: https://en.wikipedia.org/wiki/IPv4. */
+  IPv4: any;
+  /** A field whose value is a IPv6 address: https://en.wikipedia.org/wiki/IPv6. */
+  IPv6: any;
+  /** A field whose value is a ISBN-10 or ISBN-13 number: https://en.wikipedia.org/wiki/International_Standard_Book_Number. */
+  ISBN: any;
+  /** A field whose value is a IEEE 802 48-bit MAC address: https://en.wikipedia.org/wiki/MAC_address. */
+  MAC: any;
+  /** A field whose value is a valid TCP port within the range of 0 to 65535: https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_ports */
+  Port: any;
+  /** A field whose value is a CSS RGB color: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba(). */
+  RGB: any;
+  /** A field whose value is a CSS RGBA color: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba(). */
+  RGBA: any;
+  /** The `SafeInt` scalar type represents non-fractional signed whole numeric values that are considered safe as defined by the ECMAScript specification. */
+  SafeInt: any;
+  /** A currency string, such as $21.25 */
+  USCurrency: any;
+  /** A field whose value is a Currency: https://en.wikipedia.org/wiki/ISO_4217. */
+  Currency: any;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
+  /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSONObject: any;
+  /** A field whose value is an International Bank Account Number (IBAN): https://en.wikipedia.org/wiki/International_Bank_Account_Number. */
+  IBAN: any;
+  /** A field whose value conforms with the standard mongodb object ID as described here: https://docs.mongodb.com/manual/reference/method/ObjectId/#ObjectId. Example: 5e5677d71bdc2ae76344968c */
+  ObjectID: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
 
-/** Uploaded File Response */
-export type UploadedFileResponse = {
-  __typename?: 'UploadedFileResponse';
-  filename: Scalars['String'];
-  mimetype: Scalars['String'];
-  encoding: Scalars['String'];
-  url: Scalars['String'];
+/** Album */
+export type Album = {
+  __typename?: 'Album';
+  /** Id */
+  id: Scalars['Int'];
+  /** Album Title */
+  title: Scalars['String'];
+  /** Album Description */
+  description: Scalars['String'];
 };
 
-export type S3PutPreSignedUrlResponse = {
-  __typename?: 'S3PutPreSignedUrlResponse';
-  signedRequest: Scalars['String'];
-  url: Scalars['String'];
+export type AlbumOutput = {
+  __typename?: 'AlbumOutput';
+  /** Id */
+  id: Scalars['Int'];
+  /** Album Title */
+  title: Scalars['String'];
+  /** Album Description */
+  description: Scalars['String'];
+  /** Created At */
+  createdAt: Scalars['DateTime'];
 };
 
-export type S3GetPreSignedUrlResponse = {
-  __typename?: 'S3GetPreSignedUrlResponse';
-  signedRequest: Scalars['String'];
-  url: Scalars['String'];
+export type AddAlbumOutput = {
+  __typename?: 'AddAlbumOutput';
+  album?: Maybe<AlbumOutput>;
+  errors?: Maybe<Array<Error>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAlbum?: Maybe<AddAlbumOutput>;
   s3PutPreSignedUrl: S3PutPreSignedUrlResponse;
   s3GetPreSignedUrl: S3GetPreSignedUrlResponse;
   login?: Maybe<LoginOutput>;
   register?: Maybe<RegisterOutput>;
   logout?: Maybe<Scalars['Void']>;
   saveProfile?: Maybe<UserProfileOutput>;
+};
+
+
+export type MutationAddAlbumArgs = {
+  title: Scalars['String'];
+  description: Scalars['String'];
 };
 
 
@@ -80,18 +202,58 @@ export type MutationSaveProfileArgs = {
   gender: Gender;
 };
 
+export type GetAlbumOutput = {
+  __typename?: 'GetAlbumOutput';
+  album?: Maybe<AlbumOutput>;
+  errors?: Maybe<Array<Error>>;
+};
+
+export type GetAlbumsOutput = {
+  __typename?: 'GetAlbumsOutput';
+  albums?: Maybe<Array<AlbumOutput>>;
+  errors?: Maybe<Array<Error>>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  getAlbum?: Maybe<GetAlbumOutput>;
+  getAlbums?: Maybe<GetAlbumsOutput>;
+  _dummy?: Maybe<Scalars['Boolean']>;
+  me?: Maybe<MeOutput>;
+  getUserProfile?: Maybe<UserProfileOutput>;
+};
+
+
+export type QueryGetAlbumArgs = {
+  title: Scalars['String'];
+};
+
+/** Uploaded File Response */
+export type UploadedFileResponse = {
+  __typename?: 'UploadedFileResponse';
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  encoding: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type S3PutPreSignedUrlResponse = {
+  __typename?: 'S3PutPreSignedUrlResponse';
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type S3GetPreSignedUrlResponse = {
+  __typename?: 'S3GetPreSignedUrlResponse';
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
+};
+
 
 export type Error = {
   __typename?: 'Error';
   path: Scalars['String'];
   message: Scalars['String'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  _dummy?: Maybe<Scalars['Boolean']>;
-  me?: Maybe<MeOutput>;
-  getUserProfile?: Maybe<UserProfileOutput>;
 };
 
 export type UserAccount = {
@@ -145,6 +307,50 @@ export enum Gender {
   Other = 'OTHER',
   Na = 'NA'
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
@@ -255,20 +461,6 @@ export type RegisterMutation = (
   )> }
 );
 
-export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUserProfileQuery = (
-  { __typename?: 'Query' }
-  & { getUserProfile?: Maybe<(
-    { __typename?: 'UserProfileOutput' }
-    & { userProfile?: Maybe<(
-      { __typename?: 'UserProfile' }
-      & Pick<UserProfile, 'firstName' | 'lastName' | 'gender'>
-    )> }
-  )> }
-);
-
 export type SaveProfileMutationVariables = Exact<{
   firstName: Scalars['String'];
   lastName: Scalars['String'];
@@ -281,6 +473,36 @@ export type SaveProfileMutation = (
   & { saveProfile?: Maybe<(
     { __typename?: 'UserProfileOutput' }
     & UserProfileOutputFragment
+  )> }
+);
+
+export type GetAlbumQueryVariables = Exact<{
+  title: Scalars['String'];
+}>;
+
+
+export type GetAlbumQuery = (
+  { __typename?: 'Query' }
+  & { getAlbum?: Maybe<(
+    { __typename?: 'GetAlbumOutput' }
+    & { album?: Maybe<(
+      { __typename?: 'AlbumOutput' }
+      & Pick<AlbumOutput, 'id' | 'title' | 'description' | 'createdAt'>
+    )> }
+  )> }
+);
+
+export type GetAlbumsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAlbumsQuery = (
+  { __typename?: 'Query' }
+  & { getAlbums?: Maybe<(
+    { __typename?: 'GetAlbumsOutput' }
+    & { albums?: Maybe<Array<(
+      { __typename?: 'AlbumOutput' }
+      & Pick<AlbumOutput, 'id' | 'title' | 'description' | 'createdAt'>
+    )>> }
   )> }
 );
 
@@ -298,6 +520,20 @@ export type MeQuery = (
         & UserProfileFragment
       )> }
       & UserAccountFragment
+    )> }
+  )> }
+);
+
+export type GetUserProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserProfileQuery = (
+  { __typename?: 'Query' }
+  & { getUserProfile?: Maybe<(
+    { __typename?: 'UserProfileOutput' }
+    & { userProfile?: Maybe<(
+      { __typename?: 'UserProfile' }
+      & Pick<UserProfile, 'firstName' | 'lastName' | 'gender'>
     )> }
   )> }
 );
@@ -491,44 +727,6 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const GetUserProfileDocument = gql`
-    query getUserProfile {
-  getUserProfile {
-    userProfile {
-      firstName
-      lastName
-      gender
-    }
-  }
-}
-    `;
-
-/**
- * __useGetUserProfileQuery__
- *
- * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserProfileQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetUserProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
-      }
-export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
-        }
-export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
-export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
-export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
 export const SaveProfileDocument = gql`
     mutation SaveProfile($firstName: String!, $lastName: String!, $gender: Gender!) {
   saveProfile(firstName: $firstName, lastName: $lastName, gender: $gender) {
@@ -564,6 +762,85 @@ export function useSaveProfileMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SaveProfileMutationHookResult = ReturnType<typeof useSaveProfileMutation>;
 export type SaveProfileMutationResult = Apollo.MutationResult<SaveProfileMutation>;
 export type SaveProfileMutationOptions = Apollo.BaseMutationOptions<SaveProfileMutation, SaveProfileMutationVariables>;
+export const GetAlbumDocument = gql`
+    query getAlbum($title: String!) {
+  getAlbum(title: $title) {
+    album {
+      id
+      title
+      description
+      createdAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAlbumQuery__
+ *
+ * To run a query within a React component, call `useGetAlbumQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlbumQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlbumQuery({
+ *   variables: {
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useGetAlbumQuery(baseOptions: Apollo.QueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
+      }
+export function useGetAlbumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlbumQuery, GetAlbumQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlbumQuery, GetAlbumQueryVariables>(GetAlbumDocument, options);
+        }
+export type GetAlbumQueryHookResult = ReturnType<typeof useGetAlbumQuery>;
+export type GetAlbumLazyQueryHookResult = ReturnType<typeof useGetAlbumLazyQuery>;
+export type GetAlbumQueryResult = Apollo.QueryResult<GetAlbumQuery, GetAlbumQueryVariables>;
+export const GetAlbumsDocument = gql`
+    query getAlbums {
+  getAlbums {
+    albums {
+      id
+      title
+      description
+      createdAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAlbumsQuery__
+ *
+ * To run a query within a React component, call `useGetAlbumsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlbumsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlbumsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAlbumsQuery(baseOptions?: Apollo.QueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
+      }
+export function useGetAlbumsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlbumsQuery, GetAlbumsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlbumsQuery, GetAlbumsQueryVariables>(GetAlbumsDocument, options);
+        }
+export type GetAlbumsQueryHookResult = ReturnType<typeof useGetAlbumsQuery>;
+export type GetAlbumsLazyQueryHookResult = ReturnType<typeof useGetAlbumsLazyQuery>;
+export type GetAlbumsQueryResult = Apollo.QueryResult<GetAlbumsQuery, GetAlbumsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -604,3 +881,41 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const GetUserProfileDocument = gql`
+    query getUserProfile {
+  getUserProfile {
+    userProfile {
+      firstName
+      lastName
+      gender
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserProfileQuery__
+ *
+ * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+      }
+export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
+        }
+export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Avatar,
@@ -14,6 +13,7 @@ import {
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { Album } from './types';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,23 +36,30 @@ type AlbumCardProps = {
 
 const AlbumCard = ({ className, album, ...rest }: AlbumCardProps) => {
   const classes = useStyles();
+  const match = useRouteMatch();
+  const albumPath = `${match.url}/${album.title}`;
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>
       <CardContent>
-        <Box display="flex" justifyContent="center" mb={3}>
-          <Avatar alt="Album" src={album.media} variant="square" />
-        </Box>
-        <Typography
-          align="center"
-          color="textPrimary"
-          gutterBottom
-          variant="h4">
-          {album.title}
-        </Typography>
-        <Typography align="center" color="textPrimary" variant="body1">
-          {album.description}
-        </Typography>
+        <Link to={albumPath}>
+          <Box display="flex" justifyContent="center" mb={3}>
+            {/* 
+            TODO: Have a collage image as media
+            <Avatar alt="Album" src={album.media} variant="square" /> */}
+            <Avatar alt="Album" variant="square" />
+          </Box>
+          <Typography
+            align="center"
+            color="textPrimary"
+            gutterBottom
+            variant="h4">
+            {album.title}
+          </Typography>
+          <Typography align="center" color="textPrimary" variant="body1">
+            {album.description}
+          </Typography>
+        </Link>
       </CardContent>
       <Box flexGrow={1} />
       <Divider />
@@ -67,7 +74,7 @@ const AlbumCard = ({ className, album, ...rest }: AlbumCardProps) => {
           <Grid className={classes.statsItem} item>
             <GetAppIcon className={classes.statsIcon} color="action" />
             <Typography color="textSecondary" display="inline" variant="body2">
-              {album.totalDownloads} Downloads
+              {/* TODO: Total Count {album.totalDownloads} Downloads */}
             </Typography>
           </Grid>
         </Grid>

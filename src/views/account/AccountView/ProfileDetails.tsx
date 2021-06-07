@@ -86,8 +86,6 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   });
 
   useEffect(() => {
-    if (userProfileLoading) return;
-
     if (userProfileError) {
       enqueueSnackbar(userProfileError, {
         variant: 'error'
@@ -100,7 +98,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
         ...userProfileData.getUserProfile.userProfile
       });
     }
-  }, [userProfileLoading, userProfileError, userProfileData, reset]);
+  }, [userProfileError, userProfileData, enqueueSnackbar, reset]);
 
   const [openUploadPicture, setOpenUploadPicture] = React.useState(false);
 

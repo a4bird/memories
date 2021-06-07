@@ -1,0 +1,10 @@
+query getAlbum($title: String!) {
+  getAlbum(title: $title) {
+    album {
+      id
+      title
+      description
+      createdAt
+    }
+  }
+}

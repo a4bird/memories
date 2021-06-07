@@ -11,13 +11,14 @@ import NavBar from './NavBar';
 import TopBar from './TopBar';
 
 import AccountView from 'src/views/account/AccountView';
-import AlbumsListView from 'src/views/AlbumsListView';
+import AlbumsListView from 'src/views/albums';
 import CustomerListView from 'src/views/customer/CustomerListView';
 import DashboardView from 'src/views/reports/DashboardView';
 import ProductListView from 'src/views/product/ProductListView';
 import SettingsView from 'src/views/settings/SettingsView';
 import { useLogoutMutation } from 'src/graphql/generated/types';
 import { useAuthDispatch, AuthEvent } from 'src/context/Auth';
+import { Album } from 'src/views/albums/Album';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,6 +89,9 @@ const DashboardLayout = () => {
             <Switch>
               <Route path={`${path}/account`}>
                 <AccountView />
+              </Route>
+              <Route path={`${path}/albums/:albumId`}>
+                <Album />
               </Route>
               <Route path={`${path}/albums`}>
                 <AlbumsListView />
