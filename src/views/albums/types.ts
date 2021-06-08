@@ -19,5 +19,5 @@ export type Album = {
 export type AddAlbumDialogProps = {
   open: boolean;
   handleClose: () => void;
-  handleSave: () => void;
+  handleSave: (album: Album) => void;
 };

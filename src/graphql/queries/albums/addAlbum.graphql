@@ -1,0 +1,13 @@
+mutation addAlbum($title: String!, $description: String!) {
+  addAlbum(title: $title, description: $description) {
+    album {
+      id
+      title
+      description
+      createdAt
+    }
+     errors {
+        ...Error
+    }
+  }
+}

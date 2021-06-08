@@ -27,7 +27,7 @@ const Albums = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   // const [albums, setAlbums] = useState<AlbumData[]>(data);
-  const [albums, setAlbums] = useState<Album[]>();
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   const {
     loading: getAlbumsLoading,
@@ -51,6 +51,12 @@ const Albums = () => {
   const [openAddAlbumDialog, setOpenAddAlbumDialog] = React.useState<boolean>(
     false
   );
+
+  const onAddAlbum = (album: Album) => {
+    setOpenAddAlbumDialog(false);
+    setAlbums(albums => [...albums, album]);
+    return;
+  };
 
   return (
     <Page className={classes.root} title="Albums">
@@ -78,7 +84,7 @@ const Albums = () => {
         </Box>
         <AddAlbumDialog
           open={openAddAlbumDialog}
-          handleSave={() => setOpenAddAlbumDialog(false)}
+          handleSave={album => onAddAlbum(album)}
           handleClose={() => setOpenAddAlbumDialog(false)}
         />
       </Container>

@@ -37,7 +37,7 @@ type AlbumCardProps = {
 const AlbumCard = ({ className, album, ...rest }: AlbumCardProps) => {
   const classes = useStyles();
   const match = useRouteMatch();
-  const albumPath = `${match.url}/${album.title}`;
+  const albumPath = `${match.url}/${album.id}`;
 
   return (
     <Card className={clsx(classes.root, className)} {...rest}>

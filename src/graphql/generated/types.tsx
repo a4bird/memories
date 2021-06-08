@@ -476,6 +476,26 @@ export type SaveProfileMutation = (
   )> }
 );
 
+export type AddAlbumMutationVariables = Exact<{
+  title: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type AddAlbumMutation = (
+  { __typename?: 'Mutation' }
+  & { addAlbum?: Maybe<(
+    { __typename?: 'AddAlbumOutput' }
+    & { album?: Maybe<(
+      { __typename?: 'AlbumOutput' }
+      & Pick<AlbumOutput, 'id' | 'title' | 'description' | 'createdAt'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'Error' }
+      & ErrorFragment
+    )>> }
+  )> }
+);
+
 export type GetAlbumQueryVariables = Exact<{
   title: Scalars['String'];
 }>;
@@ -762,6 +782,48 @@ export function useSaveProfileMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SaveProfileMutationHookResult = ReturnType<typeof useSaveProfileMutation>;
 export type SaveProfileMutationResult = Apollo.MutationResult<SaveProfileMutation>;
 export type SaveProfileMutationOptions = Apollo.BaseMutationOptions<SaveProfileMutation, SaveProfileMutationVariables>;
+export const AddAlbumDocument = gql`
+    mutation addAlbum($title: String!, $description: String!) {
+  addAlbum(title: $title, description: $description) {
+    album {
+      id
+      title
+      description
+      createdAt
+    }
+    errors {
+      ...Error
+    }
+  }
+}
+    ${ErrorFragmentDoc}`;
+export type AddAlbumMutationFn = Apollo.MutationFunction<AddAlbumMutation, AddAlbumMutationVariables>;
+
+/**
+ * __useAddAlbumMutation__
+ *
+ * To run a mutation, you first call `useAddAlbumMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAlbumMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAlbumMutation, { data, loading, error }] = useAddAlbumMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useAddAlbumMutation(baseOptions?: Apollo.MutationHookOptions<AddAlbumMutation, AddAlbumMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAlbumMutation, AddAlbumMutationVariables>(AddAlbumDocument, options);
+      }
+export type AddAlbumMutationHookResult = ReturnType<typeof useAddAlbumMutation>;
+export type AddAlbumMutationResult = Apollo.MutationResult<AddAlbumMutation>;
+export type AddAlbumMutationOptions = Apollo.BaseMutationOptions<AddAlbumMutation, AddAlbumMutationVariables>;
 export const GetAlbumDocument = gql`
     query getAlbum($title: String!) {
   getAlbum(title: $title) {
