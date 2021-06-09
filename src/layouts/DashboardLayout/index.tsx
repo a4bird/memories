@@ -18,7 +18,7 @@ import ProductListView from 'src/views/product/ProductListView';
 import SettingsView from 'src/views/settings/SettingsView';
 import { useLogoutMutation } from 'src/graphql/generated/types';
 import { useAuthDispatch, AuthEvent } from 'src/context/Auth';
-import { Album } from 'src/views/albums/Album';
+import { Album } from 'src/views/albums/Album/Album';
 
 const useStyles = makeStyles(theme => ({
   root: {

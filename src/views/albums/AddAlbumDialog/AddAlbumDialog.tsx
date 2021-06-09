@@ -7,7 +7,6 @@ import {
   Button,
   createStyles,
   makeStyles,
-  Theme,
   CircularProgress
 } from '@material-ui/core';
 import * as Yup from 'yup';

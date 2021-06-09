@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import 'react-input-range/lib/css/index.css';
 
-import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
@@ -20,7 +20,7 @@ import {
   DialogContent
 } from 'src/components/Dialog';
 
-const avatarModalStyles = makeStyles((theme: Theme) => ({
+const avatarModalStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     justifyContent: 'center'
@@ -126,8 +126,6 @@ export default function UploadAvatarModal({
     };
   }
 
-  // const signedRequest =
-  //   'https://my-memories-bucket.s3.ap-southeast-2.amazonaws.com/profile-pic?AWSAccessKeyId=AKIA6MYFLBJ6KULNFUXQ&Content-Type=image%2Fjpg&Expires=1615115974&Signature=WXYSH9GuWeIRZep%2BM%2FXwQVdEkpk%3D&x-amz-acl=public-read';
   const [mutate, { loading, error }] = useS3PutPreSignedUrlMutation({
     onCompleted(data) {
       const signedRequest = data.s3PutPreSignedUrl.signedRequest;
@@ -158,8 +156,6 @@ export default function UploadAvatarModal({
   });
 
   const uploadPhoto = async () => {
-    // TODO: A mutation just for profile-pic
-
     if (editorRef.current == null) return;
     const canvas = editorRef.current.getImageScaledToCanvas();
 

@@ -4,8 +4,7 @@ import { Pagination } from '@material-ui/lab';
 import Page from 'src/components/Page';
 import Toolbar from './Toolbar';
 import AlbumCard from './AlbumCard';
-import data from './data';
-import { Album, AlbumData } from './types';
+import { Album } from './types';
 import AddAlbumDialog from './AddAlbumDialog/AddAlbumDialog';
 import { useGetAlbumsQuery } from 'src/graphql/generated/types';
 import { useSnackbar } from 'notistack';
@@ -26,8 +25,10 @@ const useStyles = makeStyles(theme => ({
 const Albums = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  // const [albums, setAlbums] = useState<AlbumData[]>(data);
   const [albums, setAlbums] = useState<Album[]>([]);
+  const [openAddAlbumDialog, setOpenAddAlbumDialog] = React.useState<boolean>(
+    false
+  );
 
   const {
     loading: getAlbumsLoading,
@@ -47,10 +48,6 @@ const Albums = () => {
       setAlbums(getAlbumsData.getAlbums.albums);
     }
   }, [getAlbumsError, getAlbumsData, enqueueSnackbar]);
-
-  const [openAddAlbumDialog, setOpenAddAlbumDialog] = React.useState<boolean>(
-    false
-  );
 
   const onAddAlbum = (album: Album) => {
     setOpenAddAlbumDialog(false);
