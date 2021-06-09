@@ -18,7 +18,7 @@ import { DialogTitle } from 'src/components/Dialog';
 import { AddAlbumDialogProps } from '../types';
 import { useSnackbar } from 'notistack';
 import { Uppy } from '@uppy/core';
-import { useS3PutPreSignedUrlMutation } from 'src/graphql/generated/types';
+import { useAvatarPutPreSignedUrlMutation } from 'src/graphql/generated/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -34,7 +34,7 @@ const AddPhotosDialog = ({ open, handleClose }: AddAlbumDialogProps) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [mutate, { loading, error }] = useS3PutPreSignedUrlMutation();
+  const [mutate, { loading, error }] = useAvatarPutPreSignedUrlMutation();
 
   const addPhotosUppy = useUppy(() => {
     return new Uppy()
@@ -46,7 +46,7 @@ const AddPhotosDialog = ({ open, handleClose }: AddAlbumDialogProps) => {
               filetype: file.type!
             }
           })
-            .then(response => response.data?.s3PutPreSignedUrl)
+            .then(response => response.data?.avatarPutPreSignedUrl)
             .then(signedResponse => {
               return {
                 method: 'PUT',

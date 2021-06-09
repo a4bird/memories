@@ -158,8 +158,8 @@ export type AddAlbumOutput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addAlbum?: Maybe<AddAlbumOutput>;
-  s3PutPreSignedUrl: S3PutPreSignedUrlResponse;
-  s3GetPreSignedUrl: S3GetPreSignedUrlResponse;
+  avatarPutPreSignedUrl: S3PutPreSignedUrlResponse;
+  avatarGetPreSignedUrl: S3GetPreSignedUrlResponse;
   login?: Maybe<LoginOutput>;
   register?: Maybe<RegisterOutput>;
   logout?: Maybe<Scalars['Void']>;
@@ -173,13 +173,13 @@ export type MutationAddAlbumArgs = {
 };
 
 
-export type MutationS3PutPreSignedUrlArgs = {
+export type MutationAvatarPutPreSignedUrlArgs = {
   filename: Scalars['String'];
   filetype: Scalars['String'];
 };
 
 
-export type MutationS3GetPreSignedUrlArgs = {
+export type MutationAvatarGetPreSignedUrlArgs = {
   filename: Scalars['String'];
 };
 
@@ -411,15 +411,15 @@ export type UserProfileOutputFragment = (
   )> }
 );
 
-export type S3PutPreSignedUrlMutationVariables = Exact<{
+export type AvatarPutPreSignedUrlMutationVariables = Exact<{
   filename: Scalars['String'];
   filetype: Scalars['String'];
 }>;
 
 
-export type S3PutPreSignedUrlMutation = (
+export type AvatarPutPreSignedUrlMutation = (
   { __typename?: 'Mutation' }
-  & { s3PutPreSignedUrl: (
+  & { avatarPutPreSignedUrl: (
     { __typename?: 'S3PutPreSignedUrlResponse' }
     & Pick<S3PutPreSignedUrlResponse, 'signedRequest' | 'url'>
   ) }
@@ -614,41 +614,41 @@ export const UserProfileOutputFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${UserProfileFragmentDoc}`;
-export const S3PutPreSignedUrlDocument = gql`
-    mutation s3PutPreSignedUrl($filename: String!, $filetype: String!) {
-  s3PutPreSignedUrl(filename: $filename, filetype: $filetype) {
+export const AvatarPutPreSignedUrlDocument = gql`
+    mutation avatarPutPreSignedUrl($filename: String!, $filetype: String!) {
+  avatarPutPreSignedUrl(filename: $filename, filetype: $filetype) {
     signedRequest
     url
   }
 }
     `;
-export type S3PutPreSignedUrlMutationFn = Apollo.MutationFunction<S3PutPreSignedUrlMutation, S3PutPreSignedUrlMutationVariables>;
+export type AvatarPutPreSignedUrlMutationFn = Apollo.MutationFunction<AvatarPutPreSignedUrlMutation, AvatarPutPreSignedUrlMutationVariables>;
 
 /**
- * __useS3PutPreSignedUrlMutation__
+ * __useAvatarPutPreSignedUrlMutation__
  *
- * To run a mutation, you first call `useS3PutPreSignedUrlMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useS3PutPreSignedUrlMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAvatarPutPreSignedUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAvatarPutPreSignedUrlMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [s3PutPreSignedUrlMutation, { data, loading, error }] = useS3PutPreSignedUrlMutation({
+ * const [avatarPutPreSignedUrlMutation, { data, loading, error }] = useAvatarPutPreSignedUrlMutation({
  *   variables: {
  *      filename: // value for 'filename'
  *      filetype: // value for 'filetype'
  *   },
  * });
  */
-export function useS3PutPreSignedUrlMutation(baseOptions?: Apollo.MutationHookOptions<S3PutPreSignedUrlMutation, S3PutPreSignedUrlMutationVariables>) {
+export function useAvatarPutPreSignedUrlMutation(baseOptions?: Apollo.MutationHookOptions<AvatarPutPreSignedUrlMutation, AvatarPutPreSignedUrlMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<S3PutPreSignedUrlMutation, S3PutPreSignedUrlMutationVariables>(S3PutPreSignedUrlDocument, options);
+        return Apollo.useMutation<AvatarPutPreSignedUrlMutation, AvatarPutPreSignedUrlMutationVariables>(AvatarPutPreSignedUrlDocument, options);
       }
-export type S3PutPreSignedUrlMutationHookResult = ReturnType<typeof useS3PutPreSignedUrlMutation>;
-export type S3PutPreSignedUrlMutationResult = Apollo.MutationResult<S3PutPreSignedUrlMutation>;
-export type S3PutPreSignedUrlMutationOptions = Apollo.BaseMutationOptions<S3PutPreSignedUrlMutation, S3PutPreSignedUrlMutationVariables>;
+export type AvatarPutPreSignedUrlMutationHookResult = ReturnType<typeof useAvatarPutPreSignedUrlMutation>;
+export type AvatarPutPreSignedUrlMutationResult = Apollo.MutationResult<AvatarPutPreSignedUrlMutation>;
+export type AvatarPutPreSignedUrlMutationOptions = Apollo.BaseMutationOptions<AvatarPutPreSignedUrlMutation, AvatarPutPreSignedUrlMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(email: $usernameOrEmail, password: $password) {

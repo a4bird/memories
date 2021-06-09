@@ -1,6 +1,0 @@
-mutation s3PutPreSignedUrl($filename: String!, $filetype: String!) {
-  s3PutPreSignedUrl(filename: $filename, filetype: $filetype) {
-    signedRequest
-    url
-  }
-}

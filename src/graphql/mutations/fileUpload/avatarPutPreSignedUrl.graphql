@@ -1,0 +1,6 @@
+mutation avatarPutPreSignedUrl($filename: String!, $filetype: String!) {
+  avatarPutPreSignedUrl(filename: $filename, filetype: $filetype) {
+    signedRequest
+    url
+  }
+}

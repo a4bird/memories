@@ -12,7 +12,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 
-import { useS3PutPreSignedUrlMutation } from 'src/graphql/generated/types';
+import { useAvatarPutPreSignedUrlMutation } from 'src/graphql/generated/types';
 import { ProfileEvent, useAuthDispatch } from 'src/context/Auth';
 import {
   DialogTitle,
@@ -126,9 +126,9 @@ export default function UploadAvatarModal({
     };
   }
 
-  const [mutate, { loading, error }] = useS3PutPreSignedUrlMutation({
+  const [mutate, { loading, error }] = useAvatarPutPreSignedUrlMutation({
     onCompleted(data) {
-      const signedRequest = data.s3PutPreSignedUrl.signedRequest;
+      const signedRequest = data.avatarPutPreSignedUrl.signedRequest;
 
       dispatch({
         type: ProfileEvent.CHANGE_AVATAR,
