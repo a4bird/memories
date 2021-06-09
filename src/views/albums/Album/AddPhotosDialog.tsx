@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogContentText,
   createStyles,
   makeStyles,
-  CircularProgress
+  Dialog,
+  DialogContent
 } from '@material-ui/core';
 import { Dashboard, useUppy } from '@uppy/react';
 import AwsS3 from '@uppy/aws-s3';
@@ -13,12 +11,10 @@ import AwsS3 from '@uppy/aws-s3';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 
-import { DialogTitle } from 'src/components/Dialog';
-
-import { AddAlbumDialogProps } from '../types';
+import { AddPhotoDialogProps } from '../types';
 import { useSnackbar } from 'notistack';
 import { Uppy } from '@uppy/core';
-import { useAvatarPutPreSignedUrlMutation } from 'src/graphql/generated/types';
+import { usePhotoPutPreSignedUrlMutation } from 'src/graphql/generated/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -30,23 +26,43 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const AddPhotosDialog = ({ open, handleClose }: AddAlbumDialogProps) => {
+const AddPhotosDialog = ({
+  albumId,
+  open,
+  handleClose
+}: AddPhotoDialogProps) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [mutate, { loading, error }] = useAvatarPutPreSignedUrlMutation();
+  const [mutate, { error }] = usePhotoPutPreSignedUrlMutation();
+
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar('Error fetching signed Url to upload file', {
+        variant: 'error'
+      });
+      return;
+    }
+  }, [error, enqueueSnackbar]);
 
   const addPhotosUppy = useUppy(() => {
-    return new Uppy()
+    return new Uppy({
+      restrictions: {
+        maxFileSize: 1024 * 1024 * 5,
+        maxNumberOfFiles: 10,
+        allowedFileTypes: ['image/*']
+      }
+    })
       .use(AwsS3, {
         getUploadParameters(file) {
           return mutate({
             variables: {
-              filename: `timesheets/${file.name}`,
+              albumId: albumId,
+              filename: file.name,
               filetype: file.type!
             }
           })
-            .then(response => response.data?.avatarPutPreSignedUrl)
+            .then(response => response.data?.photoPutPreSignedUrl)
             .then(signedResponse => {
               return {
                 method: 'PUT',

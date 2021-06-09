@@ -1,5 +1,5 @@
-query getAlbum($title: String!) {
-  getAlbum(title: $title) {
+query getAlbum($id: Int!) {
+  getAlbum(id: $id) {
     album {
       id
       title

@@ -1,0 +1,14 @@
+mutation photoPutPreSignedUrl(
+  $albumId: Int!
+  $filename: String!
+  $filetype: String!
+) {
+  photoPutPreSignedUrl(
+    albumId: $albumId
+    filename: $filename
+    filetype: $filetype
+  ) {
+    signedRequest
+    url
+  }
+}

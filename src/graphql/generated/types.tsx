@@ -160,6 +160,7 @@ export type Mutation = {
   addAlbum?: Maybe<AddAlbumOutput>;
   avatarPutPreSignedUrl: S3PutPreSignedUrlResponse;
   avatarGetPreSignedUrl: S3GetPreSignedUrlResponse;
+  photoPutPreSignedUrl: S3PutPreSignedUrlResponse;
   login?: Maybe<LoginOutput>;
   register?: Maybe<RegisterOutput>;
   logout?: Maybe<Scalars['Void']>;
@@ -181,6 +182,13 @@ export type MutationAvatarPutPreSignedUrlArgs = {
 
 export type MutationAvatarGetPreSignedUrlArgs = {
   filename: Scalars['String'];
+};
+
+
+export type MutationPhotoPutPreSignedUrlArgs = {
+  albumId: Scalars['Int'];
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
 };
 
 
@@ -225,7 +233,7 @@ export type Query = {
 
 
 export type QueryGetAlbumArgs = {
-  title: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 /** Uploaded File Response */
@@ -425,6 +433,21 @@ export type AvatarPutPreSignedUrlMutation = (
   ) }
 );
 
+export type PhotoPutPreSignedUrlMutationVariables = Exact<{
+  albumId: Scalars['Int'];
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+}>;
+
+
+export type PhotoPutPreSignedUrlMutation = (
+  { __typename?: 'Mutation' }
+  & { photoPutPreSignedUrl: (
+    { __typename?: 'S3PutPreSignedUrlResponse' }
+    & Pick<S3PutPreSignedUrlResponse, 'signedRequest' | 'url'>
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
@@ -497,7 +520,7 @@ export type AddAlbumMutation = (
 );
 
 export type GetAlbumQueryVariables = Exact<{
-  title: Scalars['String'];
+  id: Scalars['Int'];
 }>;
 
 
@@ -649,6 +672,42 @@ export function useAvatarPutPreSignedUrlMutation(baseOptions?: Apollo.MutationHo
 export type AvatarPutPreSignedUrlMutationHookResult = ReturnType<typeof useAvatarPutPreSignedUrlMutation>;
 export type AvatarPutPreSignedUrlMutationResult = Apollo.MutationResult<AvatarPutPreSignedUrlMutation>;
 export type AvatarPutPreSignedUrlMutationOptions = Apollo.BaseMutationOptions<AvatarPutPreSignedUrlMutation, AvatarPutPreSignedUrlMutationVariables>;
+export const PhotoPutPreSignedUrlDocument = gql`
+    mutation photoPutPreSignedUrl($albumId: Int!, $filename: String!, $filetype: String!) {
+  photoPutPreSignedUrl(albumId: $albumId, filename: $filename, filetype: $filetype) {
+    signedRequest
+    url
+  }
+}
+    `;
+export type PhotoPutPreSignedUrlMutationFn = Apollo.MutationFunction<PhotoPutPreSignedUrlMutation, PhotoPutPreSignedUrlMutationVariables>;
+
+/**
+ * __usePhotoPutPreSignedUrlMutation__
+ *
+ * To run a mutation, you first call `usePhotoPutPreSignedUrlMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePhotoPutPreSignedUrlMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [photoPutPreSignedUrlMutation, { data, loading, error }] = usePhotoPutPreSignedUrlMutation({
+ *   variables: {
+ *      albumId: // value for 'albumId'
+ *      filename: // value for 'filename'
+ *      filetype: // value for 'filetype'
+ *   },
+ * });
+ */
+export function usePhotoPutPreSignedUrlMutation(baseOptions?: Apollo.MutationHookOptions<PhotoPutPreSignedUrlMutation, PhotoPutPreSignedUrlMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PhotoPutPreSignedUrlMutation, PhotoPutPreSignedUrlMutationVariables>(PhotoPutPreSignedUrlDocument, options);
+      }
+export type PhotoPutPreSignedUrlMutationHookResult = ReturnType<typeof usePhotoPutPreSignedUrlMutation>;
+export type PhotoPutPreSignedUrlMutationResult = Apollo.MutationResult<PhotoPutPreSignedUrlMutation>;
+export type PhotoPutPreSignedUrlMutationOptions = Apollo.BaseMutationOptions<PhotoPutPreSignedUrlMutation, PhotoPutPreSignedUrlMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(email: $usernameOrEmail, password: $password) {
@@ -825,8 +884,8 @@ export type AddAlbumMutationHookResult = ReturnType<typeof useAddAlbumMutation>;
 export type AddAlbumMutationResult = Apollo.MutationResult<AddAlbumMutation>;
 export type AddAlbumMutationOptions = Apollo.BaseMutationOptions<AddAlbumMutation, AddAlbumMutationVariables>;
 export const GetAlbumDocument = gql`
-    query getAlbum($title: String!) {
-  getAlbum(title: $title) {
+    query getAlbum($id: Int!) {
+  getAlbum(id: $id) {
     album {
       id
       title
@@ -849,7 +908,7 @@ export const GetAlbumDocument = gql`
  * @example
  * const { data, loading, error } = useGetAlbumQuery({
  *   variables: {
- *      title: // value for 'title'
+ *      id: // value for 'id'
  *   },
  * });
  */

@@ -21,3 +21,10 @@ export type AddAlbumDialogProps = {
   handleClose: () => void;
   handleSave: (album: Album) => void;
 };
+
+export type AddPhotoDialogProps = {
+  albumId: number;
+  open: boolean;
+  handleClose: () => void;
+  handleSave: (album: Album) => void;
+};

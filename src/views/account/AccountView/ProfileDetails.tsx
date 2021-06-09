@@ -159,62 +159,66 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
 
         <Divider />
         <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              <Controller
-                as={TextField}
-                control={control}
-                fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
-                margin="normal"
-                variant="outlined"
-                rules={{
-                  required: true
-                }}
-                error={!!errors?.firstName?.message}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <Controller
-                as={TextField}
-                control={control}
-                fullWidth
-                label="Last name"
-                name="lastName"
-                margin="normal"
-                variant="outlined"
-                rules={{
-                  required: true
-                }}
-                error={!!errors?.lastName?.message}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <Box display="flex" flexDirection="column">
-                <InputLabel id="gender-select-label">Gender</InputLabel>
+          {userProfileLoading ? (
+            <CircularProgress />
+          ) : (
+            <Grid container spacing={3}>
+              <Grid item md={6} xs={12}>
                 <Controller
+                  as={TextField}
                   control={control}
-                  defaultValue=""
-                  name="gender"
-                  rules={{ required: true }}
-                  error={!!errors?.gender?.message}
-                  as={
-                    <Select id="trinity-select">
-                      {Object.values(Gender).map(gender => {
-                        return (
-                          <MenuItem key={gender} value={gender}>
-                            {gender}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  }
+                  fullWidth
+                  helperText="Please specify the first name"
+                  label="First name"
+                  name="firstName"
+                  margin="normal"
+                  variant="outlined"
+                  rules={{
+                    required: true
+                  }}
+                  error={!!errors?.firstName?.message}
                 />
-              </Box>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Controller
+                  as={TextField}
+                  control={control}
+                  fullWidth
+                  label="Last name"
+                  name="lastName"
+                  margin="normal"
+                  variant="outlined"
+                  rules={{
+                    required: true
+                  }}
+                  error={!!errors?.lastName?.message}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Box display="flex" flexDirection="column">
+                  <InputLabel id="gender-select-label">Gender</InputLabel>
+                  <Controller
+                    control={control}
+                    defaultValue=""
+                    name="gender"
+                    rules={{ required: true }}
+                    error={!!errors?.gender?.message}
+                    as={
+                      <Select id="trinity-select">
+                        {Object.values(Gender).map(gender => {
+                          return (
+                            <MenuItem key={gender} value={gender}>
+                              {gender}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    }
+                  />
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </CardContent>
         <Divider />
         <Box display="flex" justifyContent="flex-end" p={2}>
