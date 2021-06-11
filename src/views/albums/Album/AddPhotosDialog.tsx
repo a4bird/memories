@@ -54,6 +54,7 @@ const AddPhotosDialog = ({
       }
     })
       .use(AwsS3, {
+        metaFields: ['name'],
         getUploadParameters(file) {
           return mutate({
             variables: {
