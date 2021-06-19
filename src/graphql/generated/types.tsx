@@ -126,17 +126,7 @@ export type Scalars = {
 };
 
 
-/** Album */
-export type Album = {
-  __typename?: 'Album';
-  /** Id */
-  id: Scalars['Int'];
-  /** Album Title */
-  title: Scalars['String'];
-  /** Album Description */
-  description: Scalars['String'];
-};
-
+/** Album Output */
 export type AlbumOutput = {
   __typename?: 'AlbumOutput';
   /** Id */
@@ -147,6 +137,8 @@ export type AlbumOutput = {
   description: Scalars['String'];
   /** Created At */
   createdAt: Scalars['DateTime'];
+  /** Photos */
+  photos?: Maybe<Array<Photo>>;
 };
 
 export type AddAlbumOutput = {
@@ -254,6 +246,17 @@ export type S3PutPreSignedUrlResponse = {
 export type S3GetPreSignedUrlResponse = {
   __typename?: 'S3GetPreSignedUrlResponse';
   signedRequest: Scalars['String'];
+  url: Scalars['String'];
+};
+
+/** Photo */
+export type Photo = {
+  __typename?: 'Photo';
+  /** File name */
+  filename: Scalars['String'];
+  /** Created at */
+  createdAt: Scalars['DateTime'];
+  /** Url */
   url: Scalars['String'];
 };
 
@@ -531,6 +534,10 @@ export type GetAlbumQuery = (
     & { album?: Maybe<(
       { __typename?: 'AlbumOutput' }
       & Pick<AlbumOutput, 'id' | 'title' | 'description' | 'createdAt'>
+      & { photos?: Maybe<Array<(
+        { __typename?: 'Photo' }
+        & Pick<Photo, 'filename' | 'createdAt' | 'url'>
+      )>> }
     )> }
   )> }
 );
@@ -891,6 +898,11 @@ export const GetAlbumDocument = gql`
       title
       description
       createdAt
+      photos {
+        filename
+        createdAt
+        url
+      }
     }
   }
 }

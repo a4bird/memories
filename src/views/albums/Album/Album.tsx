@@ -4,7 +4,12 @@ import {
   Container,
   makeStyles,
   CircularProgress,
-  Typography
+  Typography,
+  Grid,
+  Card,
+  CardHeader,
+  Divider,
+  CardContent
 } from '@material-ui/core';
 
 import Page from 'src/components/Page';
@@ -13,6 +18,7 @@ import { Album as AlbumType } from '../types';
 import AddPhotosDialog from './AddPhotosDialog';
 import Toolbar from './Toolbar';
 import { useSnackbar } from 'notistack';
+import PhotoCard from './PhotoCard';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +30,9 @@ const useStyles = makeStyles(theme => ({
   photoCard: {
     height: '100%'
   },
-  toolbar: {}
+  toolbar: {
+    marginBottom: 15
+  }
 }));
 
 export const Album = () => {
@@ -59,7 +67,7 @@ export const Album = () => {
   }, [data, error, enqueueSnackbar]);
 
   return (
-    <Page className={classes.root} title="Album">
+    <Page className={classes.root} title={`${albumDetails?.title || 'Album'}`}>
       <Container maxWidth={false}>
         <Toolbar
           className={classes.toolbar}
@@ -68,13 +76,20 @@ export const Album = () => {
         {loading ? (
           <CircularProgress />
         ) : (
-          <Typography
-            align="left"
-            color="textPrimary"
-            gutterBottom
-            variant="h4">
-            {`Photo Album - ${albumDetails?.title}`}
-          </Typography>
+          <Card>
+            <CardHeader title={`Photo Album - ${albumDetails?.title}`} />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={3}>
+                {albumDetails?.photos &&
+                  albumDetails.photos.map(photo => (
+                    <Grid item key={photo.filename} lg={4} md={6} xs={12}>
+                      <PhotoCard className={classes.photoCard} photo={photo} />
+                    </Grid>
+                  ))}
+              </Grid>
+            </CardContent>
+          </Card>
         )}
 
         {albumDetails && (

@@ -1,4 +1,10 @@
-import { Scalars } from 'src/graphql/generated/types';
+import { Maybe, Scalars } from 'src/graphql/generated/types';
+
+export type Photo = {
+  filename: string;
+  url: string;
+  createdAt: Scalars['DateTime'];
+};
 
 export type AlbumData = {
   id: string;
@@ -14,6 +20,7 @@ export type Album = {
   description: string;
   title: string;
   createdAt: Scalars['DateTime'];
+  photos?: Maybe<Photo[]>;
 };
 
 export type AddAlbumDialogProps = {

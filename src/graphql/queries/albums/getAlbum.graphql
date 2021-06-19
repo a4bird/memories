@@ -5,6 +5,11 @@ query getAlbum($id: Int!) {
       title
       description
       createdAt
+      photos {
+        filename
+        createdAt
+        url
+      }
     }
   }
 }
