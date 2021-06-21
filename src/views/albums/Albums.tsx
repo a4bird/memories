@@ -34,7 +34,9 @@ const Albums = () => {
     loading: getAlbumsLoading,
     error: getAlbumsError,
     data: getAlbumsData
-  } = useGetAlbumsQuery();
+  } = useGetAlbumsQuery({
+    fetchPolicy: 'cache-and-network'
+  });
 
   useEffect(() => {
     if (getAlbumsError) {

@@ -7,18 +7,22 @@ import {
   useRouteMatch
 } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
-import NavBar from './NavBar';
-import TopBar from './TopBar';
-
 import AccountView from 'src/views/account/AccountView';
 import AlbumsListView from 'src/views/albums';
 import CustomerListView from 'src/views/customer/CustomerListView';
 import DashboardView from 'src/views/reports/DashboardView';
 import ProductListView from 'src/views/product/ProductListView';
 import SettingsView from 'src/views/settings/SettingsView';
-import { useLogoutMutation } from 'src/graphql/generated/types';
+import {
+  namedOperations,
+  useLogoutMutation
+} from 'src/graphql/generated/types';
 import { useAuthDispatch, AuthEvent } from 'src/context/Auth';
 import { Album } from 'src/views/albums/Album/Album';
+import { useSnackbar } from 'notistack';
+import NavBar from './NavBar';
+import TopBar from './TopBar';
+import { useMeQuery } from 'src/graphql/generated/types';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,25 +55,31 @@ const useStyles = makeStyles(theme => ({
 
 const DashboardLayout = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const history = useHistory();
   const { path } = useRouteMatch();
   const dispatch = useAuthDispatch();
-  const [logout] = useLogoutMutation();
+  const [logout] = useLogoutMutation({
+    refetchQueries: [namedOperations.Query.Me]
+  });
 
   const handleLogout = async () => {
     try {
-      await logout();
-      history.push('/login', { replace: true });
-      // redirect to login page
-      dispatch({
-        type: AuthEvent.LOGOUT,
-        payload: {
-          isAuthenticated: false
-        }
+      await logout().then(() => {
+        // redirect to login page
+        dispatch({
+          type: AuthEvent.LOGOUT,
+          payload: {
+            isAuthenticated: false
+          }
+        });
+        history.push('/login', { replace: true });
       });
     } catch (e) {
-      // TODO: Handle exception
+      enqueueSnackbar('Error occured while logging out user', {
+        variant: 'error'
+      });
     }
   };
 

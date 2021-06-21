@@ -1052,3 +1052,28 @@ export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
 export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
 export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
+export const namedOperations = {
+  Query: {
+    getAlbum: 'getAlbum',
+    getAlbums: 'getAlbums',
+    Me: 'Me',
+    getUserProfile: 'getUserProfile'
+  },
+  Mutation: {
+    avatarPutPreSignedUrl: 'avatarPutPreSignedUrl',
+    photoPutPreSignedUrl: 'photoPutPreSignedUrl',
+    Login: 'Login',
+    Logout: 'Logout',
+    Register: 'Register',
+    SaveProfile: 'SaveProfile',
+    addAlbum: 'addAlbum'
+  },
+  Fragment: {
+    Error: 'Error',
+    LoginOutput: 'LoginOutput',
+    RegisterOutput: 'RegisterOutput',
+    UserAccount: 'UserAccount',
+    UserProfile: 'UserProfile',
+    UserProfileOutput: 'UserProfileOutput'
+  }
+}

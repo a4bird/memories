@@ -7,6 +7,7 @@ generates:
       - typescript
       - typescript-operations
       - typescript-react-apollo
+      - named-operations-object
     # The combined options of all provided plug-ins
     # More information about the options below:
     # graphql-code-generator.com/docs/plugins/typescript-react-apollo#configuration

@@ -15,17 +15,10 @@ import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  Users as UsersIcon
+  User as UserIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 import { useAuthState } from 'src/context/Auth';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Abdul Wahab'
-};
 
 const items = [
   {
@@ -107,9 +100,6 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
         />
         <Typography className={classes.name} color="textPrimary" variant="h5">
           {`${userAccount.profile.firstName} ${userAccount.profile.lastName}`}
-        </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
         </Typography>
       </Box>
       <Divider />

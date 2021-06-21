@@ -12,7 +12,9 @@ import { useAuthState, useAuthDispatch, AuthEvent } from './context/Auth';
 const App: React.FC = () => {
   const dispatch = useAuthDispatch();
   const authState = useAuthState();
-  const { loading, error, data } = useMeQuery();
+  const { loading, error, data } = useMeQuery({
+    fetchPolicy: 'cache-and-network'
+  });
 
   useEffect(() => {
     if (loading || error) return;
