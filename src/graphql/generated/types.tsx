@@ -239,6 +239,7 @@ export type UploadedFileResponse = {
 
 export type S3PutPreSignedUrlResponse = {
   __typename?: 'S3PutPreSignedUrlResponse';
+  filename: Scalars['String'];
   signedRequest: Scalars['String'];
   url: Scalars['String'];
 };

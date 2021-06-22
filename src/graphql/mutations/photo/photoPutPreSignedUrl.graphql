@@ -8,6 +8,7 @@ mutation photoPutPreSignedUrl(
     filename: $filename
     filetype: $filetype
   ) {
+    filename
     signedRequest
     url
   }

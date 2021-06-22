@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createStyles,
   makeStyles,
   Dialog,
-  DialogContent
+  DialogContent,
+  Button
 } from '@material-ui/core';
 import { Dashboard, useUppy } from '@uppy/react';
 import AwsS3 from '@uppy/aws-s3';
@@ -11,7 +12,7 @@ import AwsS3 from '@uppy/aws-s3';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 
-import { AddPhotoDialogProps } from '../types';
+import { AddPhotoDialogProps, Photo } from '../types';
 import { useSnackbar } from 'notistack';
 import { Uppy } from '@uppy/core';
 import { usePhotoPutPreSignedUrlMutation } from 'src/graphql/generated/types';
@@ -34,6 +35,9 @@ const AddPhotosDialog = ({
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [successfulPhotoUploads, setSuccessfulPhotoUploads] = useState<Photo[]>(
+    []
+  );
   const [mutate, { error }] = usePhotoPutPreSignedUrlMutation();
 
   useEffect(() => {
@@ -44,6 +48,8 @@ const AddPhotosDialog = ({
       return;
     }
   }, [error, enqueueSnackbar]);
+
+  let photoUploads: Photo[] = [];
 
   const addPhotosUppy = useUppy(() => {
     return new Uppy({
@@ -65,9 +71,27 @@ const AddPhotosDialog = ({
           })
             .then(response => response.data?.photoPutPreSignedUrl)
             .then(signedResponse => {
+              if (!signedResponse) {
+                enqueueSnackbar(
+                  'Unexpected error in response for fetching signed Url to upload file',
+                  {
+                    variant: 'error'
+                  }
+                );
+                return;
+              }
+
+              photoUploads = [
+                ...photoUploads,
+                {
+                  filename: file.name,
+                  createdAt: new Date().toJSON(),
+                  url: signedResponse.url
+                }
+              ];
               return {
                 method: 'PUT',
-                url: signedResponse?.signedRequest,
+                url: signedResponse.signedRequest,
                 fields: [],
                 headers: {
                   'Content-Type': file.type
@@ -84,8 +108,20 @@ const AddPhotosDialog = ({
         console.log('error message:', error);
       })
       .on('complete', result => {
-        const url = result.successful[0].uploadURL;
-        console.info('Upload complete on url!', url);
+        const successfulPhotoUploads = result.successful.map(successResult => {
+          const successfulPhotoUpload = photoUploads.find(
+            photo => photo.filename === successResult.name
+          );
+          if (!successfulPhotoUpload)
+            return {
+              createdAt: new Date().toJSON,
+              filename: successResult.name,
+              url: successResult.uploadURL
+            };
+          return successfulPhotoUpload;
+        });
+        setSuccessfulPhotoUploads(successfulPhotoUploads);
+        console.info('successful photo uploads', successfulPhotoUploads);
       });
   });
 
@@ -101,7 +137,7 @@ const AddPhotosDialog = ({
       maxWidth="md"
       fullWidth={true}
       open={open}
-      onClose={handleClose}
+      onClose={() => handleClose(successfulPhotoUploads)}
       aria-labelledby="form-dialog-title">
       <DialogContent className={classes.dialogContent}>
         <Dashboard
@@ -115,6 +151,12 @@ const AddPhotosDialog = ({
             strings: localeStrings
           }}
         />
+        <Button
+          autoFocus
+          onClick={() => handleClose(successfulPhotoUploads)}
+          color="secondary">
+          Close
+        </Button>
       </DialogContent>
     </Dialog>
   );

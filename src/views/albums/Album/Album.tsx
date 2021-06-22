@@ -27,9 +27,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3)
   },
-  photoCard: {
-    height: '100%'
-  },
+  photoCard: {},
   toolbar: {
     marginBottom: 15
   }
@@ -46,7 +44,12 @@ export const Album = () => {
     false
   );
 
-  const [albumDetails, setAlbumDetails] = React.useState<AlbumType>();
+  const [albumDetails, setAlbumDetails] = React.useState<AlbumType>({
+    id: +albumId,
+    description: '',
+    title: '',
+    createdAt: ''
+  });
 
   const { loading, error, data } = useGetAlbumQuery({
     variables: {
@@ -83,7 +86,7 @@ export const Album = () => {
               <Grid container spacing={3}>
                 {albumDetails?.photos &&
                   albumDetails.photos.map(photo => (
-                    <Grid item key={photo.filename} lg={4} md={6} xs={12}>
+                    <Grid item key={photo.filename} lg={3} md={6} xs={12}>
                       <PhotoCard className={classes.photoCard} photo={photo} />
                     </Grid>
                   ))}
@@ -96,8 +99,21 @@ export const Album = () => {
           <AddPhotosDialog
             albumId={albumDetails.id}
             open={openAddPhotosDialog}
-            handleSave={() => setOpenAddPhotosDialog(false)}
-            handleClose={() => setOpenAddPhotosDialog(false)}
+            handleClose={successfulUploadedPhotos => {
+              setAlbumDetails(prevAlbumDetails => {
+                const previouslyUploadedPhotos = prevAlbumDetails.photos
+                  ? prevAlbumDetails.photos
+                  : [];
+                return {
+                  ...prevAlbumDetails,
+                  photos: [
+                    ...previouslyUploadedPhotos,
+                    ...successfulUploadedPhotos
+                  ]
+                };
+              });
+              setOpenAddPhotosDialog(false);
+            }}
           />
         )}
       </Container>

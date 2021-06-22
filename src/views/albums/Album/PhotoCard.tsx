@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     margin: 'auto',
     display: 'block',
     maxWidth: '100%',
-    maxHeight: '100%'
+    height: '300px',
+    width: '300px'
   },
   statsItem: {
     alignItems: 'center',
