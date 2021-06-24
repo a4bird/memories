@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Container,
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 
 import Page from 'src/components/Page';
-import { useGetAlbumQuery } from 'src/graphql/generated/types';
+import { Photo, useGetAlbumQuery } from 'src/graphql/generated/types';
 import { Album as AlbumType } from '../types';
 import AddPhotosDialog from './AddPhotosDialog';
 import Toolbar from './Toolbar';
@@ -51,6 +51,8 @@ export const Album = () => {
     createdAt: ''
   });
 
+  const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
+
   const { loading, error, data } = useGetAlbumQuery({
     variables: {
       id: +albumId
@@ -68,6 +70,8 @@ export const Album = () => {
       setAlbumDetails(data.getAlbum.album);
     }
   }, [data, error, enqueueSnackbar]);
+
+  console.info('Selected Photos', selectedPhotos);
 
   return (
     <Page className={classes.root} title={`${albumDetails?.title || 'Album'}`}>
@@ -87,7 +91,26 @@ export const Album = () => {
                 {albumDetails?.photos &&
                   albumDetails.photos.map(photo => (
                     <Grid item key={photo.filename} lg={3} md={6} xs={12}>
-                      <PhotoCard className={classes.photoCard} photo={photo} />
+                      <PhotoCard
+                        className={classes.photoCard}
+                        photo={photo}
+                        handlePhotoCardSelected={(photo, isChecked) => {
+                          console.info(
+                            `Photo: ${JSON.stringify(
+                              photo
+                            )}, isChecked ${isChecked}`
+                          );
+                          if (isChecked) {
+                            setSelectedPhotos([...selectedPhotos, photo]);
+                            return;
+                          }
+                          setSelectedPhotos(
+                            selectedPhotos.filter(
+                              prevPhoto => prevPhoto.filename !== photo.filename
+                            )
+                          );
+                        }}
+                      />
                     </Grid>
                   ))}
               </Grid>

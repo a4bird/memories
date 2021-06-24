@@ -1,26 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
+
 import {
   Box,
   Card,
-  CardContent,
   Divider,
   Grid,
   Typography,
-  makeStyles,
-  ButtonBase
+  makeStyles
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { Photo } from '../types';
+import ImageCard from './ImageCard';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
   image: {
-    width: 128,
-    height: 128
+    '&:hover': {
+      backgroundColor: 'transparent !important'
+    }
   },
   img: {
     margin: 'auto',
@@ -29,9 +26,39 @@ const useStyles = makeStyles(theme => ({
     height: '300px',
     width: '300px'
   },
-  statsItem: {
-    alignItems: 'center',
-    display: 'flex'
+  photoItem: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    '&:hover $photoItemOverlay': {
+      opacity: 1
+    }
+  },
+  photoItemOverlay: {
+    content: '""',
+    pointerEvents: 'none',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '80px',
+    background: 'linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 100%)',
+    transition: 'opacity .2s',
+    borderBottomLeftRadius: '2px',
+    borderBottomRightRadius: '2px',
+    opacity: 0,
+    zIndex: 1,
+    color: '#e8e8e8'
+  },
+  photoItemName: {
+    boxSizing: 'content-box',
+    maxWidth: 'calc(100% - 40px)',
+    marginRight: '40px',
+    marginLeft: '5px',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   },
   statsIcon: {
     marginRight: theme.spacing(1)
@@ -41,34 +68,43 @@ const useStyles = makeStyles(theme => ({
 type PhotoCardProps = {
   className: string;
   photo: Photo;
+  handlePhotoCardSelected: (photo: Photo, isChecked: boolean) => void;
 };
 
-const PhotoCard = ({ className, photo, ...rest }: PhotoCardProps) => {
+const PhotoCard = ({
+  className,
+  photo,
+  handlePhotoCardSelected,
+  ...rest
+}: PhotoCardProps) => {
   const classes = useStyles();
 
   return (
-    <Card className={clsx(classes.root, className)} {...rest}>
-      <img className={classes.img} alt="complex" src={photo.url} />
-      <Box flexGrow={1} />
+    <Card className={clsx(classes.photoItem, className)} {...rest}>
+      <ImageCard
+        url={photo.url}
+        handleImageCardSelected={isChecked =>
+          handlePhotoCardSelected(photo, isChecked)
+        }
+      />
       <Divider />
-      <Box p={2}>
-        <Grid container justify="space-between" spacing={2}>
-          <Grid className={classes.statsItem} item>
-            <GetAppIcon className={classes.statsIcon} color="action" />
-            <Typography
-              align="center"
-              color="textPrimary"
-              gutterBottom
-              variant="h6">
-              {photo.filename}
-            </Typography>
-            <Typography
-              color="textSecondary"
-              display="inline"
-              variant="body2"></Typography>
-          </Grid>
+      <Grid
+        className={classes.photoItemOverlay}
+        container
+        justify="space-between"
+        alignItems="center">
+        <Grid item>
+          <Typography
+            className={classes.photoItemName}
+            gutterBottom
+            variant="h6">
+            {photo.filename}
+          </Typography>
         </Grid>
-      </Box>
+        <Grid item>
+          <GetAppIcon className={classes.statsIcon} color="inherit" />
+        </Grid>
+      </Grid>
     </Card>
   );
 };
