@@ -9,9 +9,7 @@ const useStyles = makeStyles(theme => ({
   img: {
     margin: 'auto',
     display: 'block',
-    maxWidth: '100%',
-    height: '300px',
-    width: '300px'
+    maxWidth: '100%'
   },
   checkbox: {
     '&.MuiButtonBase-root': {

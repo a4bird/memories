@@ -48,7 +48,8 @@ const useStyles = makeStyles(theme => ({
     borderBottomRightRadius: '2px',
     opacity: 0,
     zIndex: 1,
-    color: '#e8e8e8'
+    color: '#e8e8e8',
+    padding: '10px'
   },
   photoItemName: {
     boxSizing: 'content-box',
@@ -92,7 +93,7 @@ const PhotoCard = ({
         className={classes.photoItemOverlay}
         container
         justify="space-between"
-        alignItems="center">
+        alignItems="flex-end">
         <Grid item>
           <Typography
             className={classes.photoItemName}

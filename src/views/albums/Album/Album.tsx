@@ -4,7 +4,6 @@ import {
   Container,
   makeStyles,
   CircularProgress,
-  Typography,
   Grid,
   Card,
   CardHeader,
@@ -87,7 +86,35 @@ export const Album = () => {
             <CardHeader title={`Photo Album - ${albumDetails?.title}`} />
             <Divider />
             <CardContent>
-              <Grid container spacing={3}>
+              {albumDetails?.photos && (
+                <Grid container spacing={3}>
+                  {albumDetails.photos.map(photo => (
+                    <Grid item key={photo.filename} lg={4} md={6} xs={12}>
+                      <PhotoCard
+                        className={classes.photoCard}
+                        photo={photo}
+                        handlePhotoCardSelected={(photo, isChecked) => {
+                          console.info(
+                            `Photo: ${JSON.stringify(
+                              photo
+                            )}, isChecked ${isChecked}`
+                          );
+                          if (isChecked) {
+                            setSelectedPhotos([...selectedPhotos, photo]);
+                            return;
+                          }
+                          setSelectedPhotos(
+                            selectedPhotos.filter(
+                              prevPhoto => prevPhoto.filename !== photo.filename
+                            )
+                          );
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+              {/* <Grid container spacing={3}>
                 {albumDetails?.photos &&
                   albumDetails.photos.map(photo => (
                     <Grid item key={photo.filename} lg={3} md={6} xs={12}>
@@ -113,12 +140,12 @@ export const Album = () => {
                       />
                     </Grid>
                   ))}
-              </Grid>
+              </Grid> */}
             </CardContent>
           </Card>
         )}
 
-        {albumDetails && (
+        {albumDetails && openAddPhotosDialog && (
           <AddPhotosDialog
             albumId={albumDetails.id}
             open={openAddPhotosDialog}
