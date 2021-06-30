@@ -22,7 +22,6 @@ import { Album } from 'src/views/albums/Album/Album';
 import { useSnackbar } from 'notistack';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
-import { useMeQuery } from 'src/graphql/generated/types';
 
 const useStyles = makeStyles(theme => ({
   root: {

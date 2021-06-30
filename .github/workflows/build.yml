@@ -110,6 +110,8 @@ jobs:
 
       - name: Create build folder
         run: yarn build
+        env:
+          CI: false
 
       - name: Run build.sh
         working-directory: ./build-scripts
