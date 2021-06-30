@@ -4,7 +4,7 @@ import * as s3Deploy from '@aws-cdk/aws-s3-deployment';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as targets from '@aws-cdk/aws-route53-targets';
-import { Bucket } from '@aws-cdk/aws-s3';
+import { Bucket, CfnBucket, IBucket } from '@aws-cdk/aws-s3';
 
 import { createS3Bucket } from './constructs/s3Bucket';
 import context from './helpers/context';
@@ -27,6 +27,8 @@ export class CdkStack extends cdk.Stack {
     const bucket = createS3Bucket(this, {
       bucketName: `${project}-${envSuffix}-${slug}-app`
     });
+
+    this.enableCorsOnBucket(bucket);
 
     // Route 53 - Custom Domain
 
@@ -112,4 +114,22 @@ export class CdkStack extends cdk.Stack {
       exportName: `${project}${slug}::url`
     });
   }
+
+  enableCorsOnBucket = (bucket: IBucket) => {
+    const cfnBucket = bucket.node.findChild('Resource') as CfnBucket;
+    cfnBucket.addPropertyOverride('CorsConfiguration', {
+      CorsRules: [
+        {
+          AllowedOrigins: ['*'],
+          AllowedMethods: ['HEAD', 'GET', 'PUT', 'POST', 'DELETE'],
+          ExposedHeaders: [
+            'x-amz-server-side-encryption',
+            'x-amz-request-id',
+            'x-amz-id-2'
+          ],
+          AllowedHeaders: ['*']
+        }
+      ]
+    });
+  };
 }
