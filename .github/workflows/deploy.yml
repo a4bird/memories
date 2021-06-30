@@ -94,7 +94,7 @@ jobs:
           REGION: ${{ env.AWS_REGION }}
           PROJECT: ${{ env.PROJECT }}
           AWS_CERTIFICATE_ARN: arn:aws:acm:us-east-1:${{ steps.login-aws.outputs.aws-account-id }}:certificate/${{ secrets.AWS_CERTIFICATE_ID }}
-          AWS_ROUTE53_DOMAIN: a4brd.tk
+          AWS_ROUTE53_DOMAIN: a4bird.com
           AWS_ROUTE53_SUBDOMAIN: memories-${{ env.ENV_SUFFIX }}-${{ needs.setup.outputs.slug }}
           ENV_SUFFIX: ${{ env.ENV_SUFFIX }}
           GIT_SHA: ${{ github.sha }}
