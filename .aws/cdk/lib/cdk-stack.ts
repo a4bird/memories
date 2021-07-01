@@ -61,6 +61,14 @@ export class CdkStack extends cdk.Stack {
             behaviors: [{ isDefaultBehavior: true }]
           }
         ],
+        errorConfigurations: [
+          {
+            errorCode: 404,
+            responseCode: 200,
+            responsePagePath: '/index.html',
+            errorCachingMinTtl: 300
+          }
+        ],
         viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(
           certificate,
           {
