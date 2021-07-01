@@ -2,7 +2,61 @@ name: Build and Deploy to Development
 
 on: workflow_dispatch
 
+env:
+  PROJECT: a4bird-memories
+  NODE_VERSION: 12.16.1
+  AWS_PRIMARY_REGION: ap-southeast-2
+  AWS_REGION: ap-southeast-2
+  AWS_ROLE_TO_ASSUME: arn:aws:iam::${{ secrets.AWS_ACCOUNT_NUMBER }}:role/admin
+
 jobs:
+  setup:
+    name: Setup Variables
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch-slug.outputs.branch }}
+      slug: ${{ steps.branch-slug.outputs.slug }}
+    steps:
+      - name: Create Slug
+        id: branch-slug
+        run: |
+          branch_ref=${GITHUB_REF#refs/heads/}
+          branch="${GITHUB_HEAD_REF:-$branch_ref}"
+          slug="${branch//\//-}"
+          echo ::set-output name=branch::${branch}
+          echo ::set-output name=slug::${slug,,}
+      - name: Display branch slug output
+        id: branch-slug-output
+        run: |
+          echo "branch is ${branch}"
+          echo "slug is ${slug}"
+        env:
+          branch: ${{steps.branch-slug.outputs.branch}}
+          slug: ${{steps.branch-slug.outputs.slug}}
+
+  s3bucket:
+    name: Setup s3 bucket
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        id: login-aws
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_PRIMARY_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+
+      - name: Create s3bucket if not exists
+        run: bash ./s3bucket.sh
+        working-directory: ./build-scripts
+        env:
+          BUCKET_NAME: ${{ env.PROJECT }}
+          
   ci:
     name: Lint, Test and Build
     runs-on: ubuntu-18.04
