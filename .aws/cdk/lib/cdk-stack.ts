@@ -68,7 +68,10 @@ export class CdkStack extends cdk.Stack {
             securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1, // default
             sslMethod: cloudfront.SSLMethod.SNI // default
           }
-        )
+        ),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
+        defaultRootObject: 'index.html'
       }
     );
 
