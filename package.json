@@ -5,6 +5,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:development": "env-cmd -f .env.development yarn build",
+    "build:staging": "env-cmd -f .env.staging yarn build",
+    "build:production": "env-cmd -f .env.production yarn build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "codegen": "graphql-codegen",
@@ -54,6 +57,7 @@
     "axios": "0.21.1",
     "chart.js": "^2.9.3",
     "clsx": "^1.1.1",
+    "env-cmd": "10.1.0",
     "graphql": "15.3.0",
     "graphql-tag": "2.11.0",
     "history": "5.0.0",

@@ -1,8 +1,69 @@
-name: Deploy to Staging
+name: Build and Deploy to Staging
 
 on: workflow_dispatch
 
 jobs:
+  ci:
+    name: Lint, Test and Build
+    runs-on: ubuntu-18.04
+    needs: [setup, s3bucket]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        id: login-aws
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_PRIMARY_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          role-duration-seconds: 1200
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node-version }}
+          always-auth: true
+          scope: '@a4bird'
+          registry-url: https://npm.pkg.github.com
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Set yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # - name: Run static checks
+      #   run: yarn static-ci
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Create build folder
+        run: yarn build:staging
+        env:
+          CI: false
+
+      - name: Run build.sh
+        working-directory: ./build-scripts
+        run: bash ./build.sh
+        env:
+          GIT_SHA: ${{ github.sha }}
+          VERSION: ${{ format('1.0.0.{0}', github.run_number) }}
+          BRANCH: ${{ needs.setup.outputs.branch }}
+          SLUG: ${{ needs.setup.outputs.slug }}
+          PROJECT: ${{ env.PROJECT }}
+
   deploy:
     name: Deploy to Staging
     runs-on: ubuntu-latest
