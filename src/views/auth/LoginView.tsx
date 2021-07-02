@@ -56,8 +56,8 @@ const LoginView: React.FC = () => {
   const [login] = useLoginMutation();
   const { formState, control, errors, handleSubmit } = useForm<LoginFormData>({
     defaultValues: {
-      email: 'ab1303@gmail.com',
-      password: 'Test@1234'
+      email: '',
+      password: ''
     },
     resolver: yupResolver(validationSchema)
   });
@@ -123,6 +123,7 @@ const LoginView: React.FC = () => {
                 as={TextField}
                 control={control}
                 label="Password"
+                type="password"
                 margin="normal"
                 name={'password'}
                 rules={{
