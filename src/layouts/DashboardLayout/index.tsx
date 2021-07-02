@@ -89,8 +89,9 @@ const DashboardLayout = () => {
         onLogout={handleLogout}
       />
       <NavBar
-        onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}
+        onMobileClose={() => setMobileNavOpen(false)}
+        onLogout={handleLogout}
       />
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>

@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+
 import {
   Avatar,
   Box,
@@ -8,14 +9,15 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
+  makeStyles,
+  Button
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
-  User as UserIcon
+  User as UserIcon,
+  LogOut as LogOutIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 import { useAuthState } from 'src/context/Auth';
@@ -45,15 +47,16 @@ const items = [
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
   }
+
+  // {
+  //   href: '/404',
+  //   icon: AlertCircleIcon,
+  //   title: 'Error'
+  // }
 ];
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   mobileDrawer: {
     width: 256
   },
@@ -61,6 +64,30 @@ const useStyles = makeStyles(() => ({
     width: 256,
     top: 64,
     height: 'calc(100% - 64px)'
+  },
+  button: {
+    color: theme.palette.text.secondary,
+    fontWeight: theme.typography.fontWeightMedium,
+    justifyContent: 'flex-start',
+    letterSpacing: 0,
+    padding: '10px 8px',
+    textTransform: 'none',
+    width: '100%'
+  },
+  icon: {
+    marginRight: theme.spacing(1)
+  },
+  title: {
+    marginRight: 'auto'
+  },
+  active: {
+    color: theme.palette.primary.main,
+    '& $title': {
+      fontWeight: theme.typography.fontWeightMedium
+    },
+    '& $icon': {
+      color: theme.palette.primary.main
+    }
   },
   avatar: {
     cursor: 'pointer',
@@ -73,11 +100,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 type Props = {
-  onMobileClose: () => void;
   openMobile: boolean;
+  onMobileClose: () => void;
+  onLogout: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const NavBar = ({ onMobileClose, openMobile }: Props) => {
+const NavBar = ({ openMobile, onMobileClose, onLogout }: Props) => {
   const classes = useStyles();
 
   const { userAccount } = useAuthState();
@@ -106,6 +134,10 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
               icon={item.icon}
             />
           ))}
+          <Button className={classes.button} onClick={onLogout}>
+            <LogOutIcon className={classes.icon} />
+            <span className={classes.title}>Logout</span>
+          </Button>
         </List>
       </Box>
       <Box flexGrow={1} />
