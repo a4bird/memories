@@ -66,9 +66,4 @@ const TopBar = ({ className, onMobileNavOpen, onLogout, ...rest }: Props) => {
   );
 };
 
-TopBar.propTypes = {
-  className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func
-};
-
 export default TopBar;

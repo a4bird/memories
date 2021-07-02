@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Container,
   makeStyles,
@@ -8,7 +9,10 @@ import {
   Card,
   CardHeader,
   Divider,
-  CardContent
+  CardContent,
+  Breadcrumbs,
+  Typography,
+  Link
 } from '@material-ui/core';
 
 import Page from 'src/components/Page';
@@ -37,7 +41,7 @@ export const Album = () => {
   const { albumId } = useParams<{
     albumId: string;
   }>();
-
+  const { path } = useRouteMatch();
   const { enqueueSnackbar } = useSnackbar();
   const [openAddPhotosDialog, setOpenAddPhotosDialog] = React.useState<boolean>(
     false
@@ -75,6 +79,14 @@ export const Album = () => {
   return (
     <Page className={classes.root} title={`${albumDetails?.title || 'Album'}`}>
       <Container maxWidth={false}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Link component={RouterLink} color="inherit" to={`/app/albums`}>
+            Albums
+          </Link>
+          <Typography color="textPrimary">
+            {`${albumDetails?.title || 'Album'}`}
+          </Typography>
+        </Breadcrumbs>
         <Toolbar
           className={classes.toolbar}
           handleAddPhotosAction={() => setOpenAddPhotosDialog(true)}

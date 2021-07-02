@@ -79,13 +79,6 @@ type Props = {
 
 const NavBar = ({ onMobileClose, openMobile }: Props) => {
   const classes = useStyles();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (openMobile && onMobileClose) {
-      onMobileClose();
-    }
-  }, [location.pathname, onMobileClose, openMobile]);
 
   const { userAccount } = useAuthState();
 
